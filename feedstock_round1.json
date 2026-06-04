@@ -1,0 +1,36 @@
+[
+  {"id": "iniparib_liu_2012",
+   "title": "Iniparib nonselectively modifies proteins; not a bona fide PARP inhibitor",
+   "source_class": "preclinical_mouse",
+   "doi": "10.1158/1078-0432.CCR-11-1973",
+   "open_expected": true,
+   "note": "CONFIRMED (Claude+Grok). Clin Cancer Res 2012. Discordant: Phase III TNBC failure."},
+
+  {"id": "garrido_laguna_pdx_2011",
+   "title": "Tumor engraftment in nude mice predict poor survival and gemcitabine resistance in pancreatic cancer",
+   "source_class": "preclinical_mouse",
+   "doi": "10.1158/1078-0432.CCR-11-0341",
+   "open_expected": false,
+   "note": "CONFIRMED (Claude+Grok). Clin Cancer Res 2011;17:5793-5800. Concordant (prognostic), pdx_avatar."},
+
+  {"id": "dca_michelakis_2010",
+   "title": "Metabolic modulation of glioblastoma with dichloroacetate (5-patient cohort)",
+   "source_class": "small_human_cohort",
+   "doi": "10.1126/scitranslmed.3000677",
+   "open_expected": false,
+   "note": "CONFIRMED (Claude+Grok). Sci Transl Med 2010;2(31):31ra34. High public-consumption (off-label DCA)."},
+
+  {"id": "curcumin_notch1_retracted_2006",
+   "title": "RETRACTED: Notch-1 down-regulation by curcumin in pancreatic cancer cells",
+   "source_class": "retracted",
+   "doi": "10.1002/cncr.21904",
+   "open_expected": false,
+   "note": "CONFIRMED (Claude+Grok). Journal Cancer (Wiley) 2006. Retracted for figure/data integrity."},
+
+  {"id": "autogene_cevumeran_pdac_3yr_2024",
+   "title": "RNA neoantigen vaccines prime long-lived CD8+ T cells in pancreatic cancer (3-year follow-up)",
+   "source_class": "small_human_cohort",
+   "doi": "10.1038/s41586-024-08508-4",
+   "open_expected": false,
+   "note": "Claude-verified from Grok Job-B lead. Nature 2024. Phase I, 16 pts; 8 responders, durable RFS. Partial-concordance: strong preclinical immunogenicity -> only ~half respond; discordance_question = why most predicted neoantigens fail to elicit response."}
+]

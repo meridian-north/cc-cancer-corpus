@@ -1,0 +1,17 @@
+# Private Meridian North sub-repo — hygiene
+# Never commit identified/private material or local scrape output.
+*_IDENTIFIED*
+*PRIVATE*
+seed_record_private*
+__pycache__/
+*.pyc
+.DS_Store
+
+# local scrape output lives in ~/cancer_intake, not here — but guard anyway
+cancer_intake/
+discovered_feedstock.json
+manifest.jsonl
+files/
+
+# set your contact before committing the tools; do not commit a real personal email by accident
+# (CONTACT_EMAIL is a placeholder in the .py files until you set it)
