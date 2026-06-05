@@ -1,72 +1,121 @@
-# Conventional & Complementary Cancer Treatments — partner package for Dr. Gene Wei
+# Conventional & Complementary Cancer Treatments
+## A mechanism-organized evidence corpus
 
-*Prepared by GarrisonNode (jr / John Reed, L4) for Dr. Gene Wei, DOM AP — AntiCancer360.
-First-draft package, 2026-06-03. Method-and-tools, not a data store.*
+**What this is:** A searchable, reproducible database of published research on
+cancer treatments — conventional drugs, complementary approaches, and the
+interactions between them — organized by the biological mechanism each one targets.
+
+**What it is not:** Medical advice. Treatment recommendations. A ranking of what works.
+
+Every result comes with its evidence level stated. Every claim is traceable to a
+published source. The tool organizes; you and your care team decide.
 
 ---
 
-## What this package is
+## Start here — based on who you are
 
-A first draft of the partnership deliverable: a white paper, a worked de-identified
-seed record, and a catalog of ready-to-run adverse-event query methods. The premise
-is the **two-track** view of real-world oncology — **conventional** treatment and the
-**complementary** interventions patients actually run alongside it — given a single
-honest, reproducible structure.
-
-## The goal, in one line
-
-Take messy public adverse-event and treatment data and make it **organized,
-reproducible, and cryptographically checkable** — so conventional and complementary
-oncology can be tracked side by side, honestly, without anyone surrendering their
-data and without anyone issuing a verdict on what "works."
-
-## The partnership (fair deal)
-
-- **jr → Wei:** donates time and money to the collaboration (as in the past).
-- **Wei → the toolset:** lends clinical partnership and support — the domain
-  expertise that keeps the method honest and useful to patients and clinicians.
-- **Neither party surrenders data.** Wei keeps his patients' records and his
-  proprietary markers/measures. GarrisonNode supplies the grammar, the tools, and
-  the attestation. Toolmaker, not custodian.
-
-## What's in this folder
-
-| File | What it is |
+| I am... | Go to |
 |---|---|
-| `WHITE_PAPER_DRAFT_v1.md` | The first-draft white paper — goals, method, guardrails, demonstration. |
-| `FAERS_QUERY_KIT_CATALOG.md` | A multitude of ready-to-run openFDA/FAERS query methods Wei can pull himself. |
-| `seed_record_public_GN-CASE-LUNGADENO-0001.md` | A worked, **de-identified** single-patient seed showing the two-track envelope. |
+| A patient or caregiver | [FOR_A_CANCER_PATIENT.md](FOR_A_CANCER_PATIENT.md) |
+| A doctor or clinician | [FOR_A_DOCTOR.md](FOR_A_DOCTOR.md) |
+| A researcher | [FOR_A_RESEARCHER.md](FOR_A_RESEARCHER.md) |
+| New to all of this | [FOR_A_STRANGER.md](FOR_A_STRANGER.md) |
 
-## Privacy boundary — read this
+---
 
-This folder contains the **public, de-identified** seed only. Per the data-sovereignty
-discipline this project runs on (**public-source default; private data never enters a
-syncable tree**), the **identified private copy** of jr's seed is delivered to
-Dr. Wei **out-of-band** (direct hand-off), not stored here. Dr. Wei already holds
-jr's raw records; the private envelope is the same structure with identity restored,
-delivered separately so no identified medical data lands in a repository.
+## The headline resource — drug and supplement interaction table
 
-## The operating model — results, methods, pointers (not data)
+**[DRUG_HERB_INTERACTION_TABLE.md](DRUG_HERB_INTERACTION_TABLE.md)**
 
-GarrisonNode does **not** store anyone's data. For every question, it returns:
+A plain-language table of known interactions between common chemotherapy drugs
+and supplements, foods, and herbal preparations — organized by the enzyme pathway
+and evidence level. Built from published clinical trials and observational studies.
 
-1. **Results** — the aggregate numbers / extracts.
-2. **Methods** — the exact query and procedure, reproducible byte-for-byte.
-3. **Pointers** — where the data lives (e.g., the openFDA endpoint, the source's
-   release ID), with hashes/as-of dates so a reviewer can re-pull and re-verify.
+This is the information most oncologists do not have time to compile
+and most patients do not know to ask about. Start here.
 
-That's the whole offer: the path is public and checkable; the data stays at its source.
+---
 
-## The guardrails (non-negotiable, and they protect the patients)
+## Ask your own question using AI
 
-- **DoseAnchoredSafetyDisclosureMt** — every agent (conventional, OTC, supplement,
-  complementary) carries a dose-anchored safety clause; none gets a free pass or a
-  scarlet letter; the clause states whether the therapeutic window is characterized.
-- **EfficacyNeutralityMt** — no "scam," no "cure," from anyone. Evidence class is
-  reported; verdicts are not.
-- **DrugSafetyClauseMt** — passive surveillance is hypothesis-generating only; no
-  denominator, no causation, drug role carried on every row, alongside-not-instead-of.
+**[ASK_AI_YOUR_QUESTION.md](ASK_AI_YOUR_QUESTION.md)**
 
-*Hypothesis-generating, not causal. A harm-surfacing and experiment-tracking
-structure — never an efficacy tool or treatment guidance. The method travels with
-the data; the why stays with the human.*
+No coding required. Copy-paste prompt templates that let you ask Claude, ChatGPT,
+or any capable AI assistant about your specific drug-supplement interaction,
+your treatment mechanism, or your diagnosis — and get organized, evidence-sourced
+answers you can bring to your oncologist.
+
+---
+
+## All documents
+
+| Document | Audience | What it covers |
+|---|---|---|
+| [FOR_A_STRANGER.md](FOR_A_STRANGER.md) | Anyone | What the Warburg effect is; what this corpus does |
+| [FOR_A_DOCTOR.md](FOR_A_DOCTOR.md) | Clinicians | CYP450 interactions; why the supplement conversation matters |
+| [FOR_A_CANCER_PATIENT.md](FOR_A_CANCER_PATIENT.md) | Patients | How to use this tool without going it alone |
+| [FOR_A_RESEARCHER.md](FOR_A_RESEARCHER.md) | Researchers | Citation anomaly detection; co-location findings; open questions |
+| [DRUG_HERB_INTERACTION_TABLE.md](DRUG_HERB_INTERACTION_TABLE.md) | Everyone | CYP450 interactions, antioxidant concerns, immunotherapy flags |
+| [ASK_AI_YOUR_QUESTION.md](ASK_AI_YOUR_QUESTION.md) | Everyone | Copy-paste AI query prompts |
+| [CLINICIAN_ADVISOR_STATEMENT.md](CLINICIAN_ADVISOR_STATEMENT.md) | — | Statement from our clinical advisor (in progress) |
+| [DISCLAIMER_AND_SCOPE.md](DISCLAIMER_AND_SCOPE.md) | Everyone | What this tool will and will not do |
+| [WHITE_PAPER_DRAFT_v1.md](WHITE_PAPER_DRAFT_v1.md) | Researchers / partners | Full methodology white paper (draft) |
+| [MECHANISM_BRIDGE_electron_transport.md](MECHANISM_BRIDGE_electron_transport.md) | Researchers | Electron transport / OXPHOS node analysis |
+| [MECHANISM_BRIDGE_perfusion.md](MECHANISM_BRIDGE_perfusion.md) | Researchers | Tumor perfusion node analysis |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contributors | How to add papers, corrections, or feedback |
+
+---
+
+## How the tools work
+
+The corpus is built from three Python scripts that run against public databases
+(EuropePMC, PubMed, ClinicalTrials.gov):
+
+- **`cancer_discover.py`** — finds papers from neutral international sources
+- **`cancer_bridge.py`** — organizes them by mechanism (HOW), not by name
+- **`cancer_why_filer.py`** — flags where citation attention diverges from evidence
+
+Running `python3 cancer_bridge.py --node electron_transport_oxphos` returns all
+papers in the corpus that act on the electron transport chain — across conventional
+drugs, repurposed agents, and complementary compounds — with evidence levels.
+
+No LLMs in the discovery pipeline. Sources are real identifiers verified against
+their registries. Full methodology: [WHITE_PAPER_DRAFT_v1.md](WHITE_PAPER_DRAFT_v1.md).
+
+---
+
+## The organizing principle
+
+Most databases organize by **WHAT** (drug name, supplement name). This one
+organizes by **HOW** (mechanism of action). That matters because:
+
+- A diabetes drug (metformin) and an antimalarial (atovaquone) appear at the
+  same node when both target mitochondrial complex I
+- A supplement and a chemotherapy drug can interact via the same enzyme pathway
+  (CYP3A4) regardless of their names
+- Mechanism is the only shared vocabulary across conventional and complementary medicine
+
+The HOW-join is what makes the garlic problem visible: garlic contains compounds
+that speed up the same enzyme that processes docetaxel. That interaction has nothing
+to do with whether garlic is "natural" or whether docetaxel is "conventional." It is
+just chemistry, and it deserves a conversation.
+
+---
+
+## Status
+
+This corpus is under active development. Evidence levels are explicit and
+conservative. Where evidence is limited to preclinical or in vitro studies,
+that is stated. Where the evidence is contested, that is stated too.
+
+Current attestation anchor: `72e2860`
+Last updated: 2026-06-05
+
+---
+
+## Contact
+
+Questions, corrections, contributions, or collaboration:
+**jr.greencove@gmail.com**
+
+*Not medical advice. Every decision belongs to patients and their care teams.*
