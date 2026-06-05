@@ -19,13 +19,14 @@ Stdlib only (urllib, hashlib, json). Run on the Mac:  python3 cancer_kind_scrape
 Output goes to ~/cancer_intake/ .
 """
 
-import json, hashlib, os, sys, time, shutil, urllib.request, urllib.parse, urllib.error
+import json, hashlib, os, re, sys, time, shutil, urllib.request, urllib.parse, urllib.error
 import urllib.robotparser as robotparser
 from datetime import datetime, timezone
+from difflib import SequenceMatcher
 
 # ---------------------------------------------------------------- config
 OUTPUT_DIR    = os.path.expanduser("~/cancer_intake")
-CONTACT_EMAIL = "SET_YOUR_EMAIL@example.com"   # <-- set this; it's the polite thing
+CONTACT_EMAIL = "jr.clawdbot@gmail.com"   # polite API contact; change if you want a different address
 USER_AGENT    = f"GarrisonNode-KindScraper/1.0 (cancer research; mailto:{CONTACT_EMAIL})"
 PER_HOST_DELAY_S = 4.0      # min seconds between requests to the SAME host
 TIMEOUT_S        = 30
@@ -35,6 +36,38 @@ MAX_FILE_MB      = 50       # skip a single file larger than this
 MAX_TOTAL_MB     = 2000     # stop after this much downloaded this run
 OK_CONTENT       = ("application/pdf", "text/html", "application/xml",
                     "text/xml", "application/json", "text/plain")
+# Two-factor ingestion gate (round-2 hardening, 2026-06-04). A resolved identifier is NOT enough:
+# the resolved title must MATCH the claimed title. This catches the adversarial failure mode the
+# Gemini crosscheck exposed — a REAL, resolvable DOI attached to a CONFABULATED description (e.g.
+# 10.1016/j.psyneuen.2014.10.009 claimed as MBSR/breast-cancer but resolving to a cortisol/cognition
+# paper). Identifier-resolution alone passes it; title concordance is what rejects it. Sweep-sourced
+# rows carry the authority title already, so they score ~1.0 and pass; this gate bites peer/LLM leads
+# that cite a real id for the wrong paper. Tune as the corpus matures.
+TITLE_CONCORDANCE_THRESHOLD = 0.75
+
+def _norm_title(s):
+    s = (s or "").lower().strip()
+    for hy in ("‐", "‑", "‒", "–", "—"):
+        s = s.replace(hy, "-")
+    return re.sub(r"[^\w\s]", "", s)
+
+def title_concordance(claimed, resolved):
+    """Concordance 0..1 between a claimed title and the authority-resolved title. Returns the MAX of
+    two signals so a correct-but-truncated title isn't falsely rejected:
+      * SequenceMatcher ratio — catches reordering/edits, penalizes length difference;
+      * containment — fraction of the claimed title's words present in the resolved title, which is
+        robust to truncation/prefix (a correct short title is a subset of the full one). Only trusted
+        when the claimed title has >=4 words, so a 1-2 word title can't pass on stop-word overlap.
+    A genuine mismatch (real id, wrong paper) fails BOTH and is rejected. Absent claimed title -> 1.0."""
+    if not claimed or not resolved:
+        return 1.0
+    nc, nr = _norm_title(claimed), _norm_title(resolved)
+    if not nc or not nr:
+        return 1.0
+    ratio = SequenceMatcher(None, nc, nr).ratio()
+    ct, rt = set(nc.split()), set(nr.split())
+    containment = (len(ct & rt) / len(ct)) if len(ct) >= 4 else 0.0
+    return max(ratio, containment)
 
 # ---------------------------------------------------------------- seed feedstock
 # The 4 independently-verified intakes (Claude pass, 2026-06-03). Extend freely,
@@ -192,7 +225,13 @@ def try_download(url, dest_base, downloaded_mb):
         return {"retrieval_status": "SKIPPED_LOW_DISK", "fetched_url": url}
     if downloaded_mb[0] >= MAX_TOTAL_MB:
         return {"retrieval_status": "SKIPPED_TOTAL_CAP", "fetched_url": url}
-    status, headers, body = _request(url, "GET")
+    try:
+        status, headers, body = _request(url, "GET")
+    except Exception as e:
+        # A hung/slow OA download must not abort the whole feedstock pass (S-fix
+        # 2026-06-04): downgrade THIS item to UNVERIFIED and let the loop continue.
+        return {"retrieval_status": "UNVERIFIED", "fetched_url": url,
+                "note": f"download error: {type(e).__name__}: {e!s}"[:200]}
     if status != 200 or not body:
         return {"retrieval_status": "UNVERIFIED", "fetched_url": url, "http_status": status}
     ctype = (headers.get("Content-Type", "") or "").split(";")[0].strip().lower()
@@ -230,21 +269,31 @@ def process(item, downloaded_mb):
             return row
         row.update({"identifier": ident, "id_kind": kind, "id_verified": True,
                     "title_real": meta["title"], "journal_real": meta["journal"], "year_real": meta["year"]})
-        # honesty check: claimed vs real title (normalize unicode hyphens; strip RETRACTED prefix)
-        def _norm(s):
-            s = (s or "").lower()
-            for hy in ("‐", "‑", "‒", "–", "—"):
-                s = s.replace(hy, "-")
-            return s
-        claimed = _norm(item.get("title")).replace("retracted:", "").strip()[:30]
-        if claimed and claimed not in _norm(meta["title"]):
-            row["title_mismatch_flag"] = True
-        # ALWAYS store the verified metadata + abstract — public/free, and the analyzable
-        # 4W1H content. This is what turns the corpus from a pointer-log into real content.
+        # Two-factor gate: identifier resolved (above) AND title concordance. Strip a leading
+        # "RETRACTED:" marker first so genuinely-retracted seeds aren't penalized for the prefix.
+        claimed_title = re.sub(r"(?i)^\s*retracted:\s*", "", item.get("title") or "")
+        concordance = title_concordance(claimed_title, meta["title"])
+        row["title_concordance"] = round(concordance, 3)
+        if claimed_title and concordance < TITLE_CONCORDANCE_THRESHOLD:
+            row["retrieval_status"] = "REJECTED_TITLE_MISMATCH"
+            row["note"] = (f"identifier resolved but title concordance {concordance:.2f} < "
+                           f"{TITLE_CONCORDANCE_THRESHOLD}: claimed != resolved — NOT ingested. "
+                           f"resolved='{(meta['title'] or '')[:120]}'")
+            return row   # adversarial-citation guard: a real id on the wrong paper stops here
+        # concordance OK — store the verified metadata + abstract (public/free, analyzable
+        # 4W1H content). This is what turns the corpus from a pointer-log into real content.
         meta_doc = {"id": item["id"], "identifier": ident, "id_kind": kind,
                     "title": meta["title"], "journal": meta["journal"], "year": meta["year"],
                     "source_class": item.get("source_class"), "pointer": meta["doi_url"],
                     "abstract": item.get("abstract") or None}
+        # carry through ClinicalTrials.gov enrichment + preclinical mouse-scoreboard fields so they
+        # survive the verify step (additive; absent for non-trial/non-preclinical rows). Lets a later
+        # bridge/why pass read trial phase/results and the PreclinicalTranslationScoringMt fields
+        # (model_class / human_concordance / discordance_question) without re-deriving them.
+        for k in ("phase", "study_type", "has_results", "results_digest",
+                  "model_class", "human_concordance", "discordance_question"):
+            if item.get(k) is not None:
+                meta_doc[k] = item.get(k)
         mbytes = json.dumps(meta_doc, ensure_ascii=False).encode("utf-8")
         mpath = os.path.join(OUTPUT_DIR, "files", f"{item['id']}.meta.json")
         with open(mpath, "w", encoding="utf-8") as f:
@@ -298,7 +347,13 @@ def main():
 
     items = SEED
     if "--feedstock" in sys.argv:                      # optional: load Gemini/Grok JSON list
-        with open(sys.argv[sys.argv.index("--feedstock") + 1]) as f:
+        fs_path = sys.argv[sys.argv.index("--feedstock") + 1]
+        if not os.path.exists(fs_path):
+            # A discover pass that yielded 0 rows writes no feedstock; exit clean
+            # instead of crashing the sweep's scraper call (S-fix 2026-06-04).
+            say(f"feedstock not found ({fs_path}) — discover produced no rows; nothing to scrape.")
+            return
+        with open(fs_path) as f:
             items = json.load(f)
 
     say(f"Kind scrape start — {len(items)} items -> {OUTPUT_DIR}  (free {free_gb(OUTPUT_DIR):.0f} GB)")

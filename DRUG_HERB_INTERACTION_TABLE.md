@@ -297,5 +297,5 @@ with your full list is the destination.
 
 *Sources: Published peer-reviewed literature, clinical trials, systematic reviews.*
 *Evidence levels are explicit. No supplement is endorsed or condemned.*
-*Contact: jr.greencove@gmail.com for corrections or additions.*
+*Contact: meridian.north@pm.me for corrections or additions.*
 *This table will be updated as the corpus expands.*

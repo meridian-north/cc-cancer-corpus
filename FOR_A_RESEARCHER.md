@@ -147,4 +147,4 @@ is the right response.
 
 *Evidence sourced from public databases. Classification transparent and auditable.
 No efficacy verdict implied by co-location at any mechanistic node.
-Contact: jr.greencove@gmail.com*
+Contact: meridian.north@pm.me*

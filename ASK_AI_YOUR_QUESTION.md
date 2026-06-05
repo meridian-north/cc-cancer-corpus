@@ -133,5 +133,5 @@ If you just want answers to specific questions, use the prompts above.
 
 ---
 
-*Contact: jr.greencove@gmail.com*
+*Contact: meridian.north@pm.me*
 *This is not medical advice. All decisions belong to patients and their clinicians.*

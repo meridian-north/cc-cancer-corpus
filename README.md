@@ -116,6 +116,6 @@ Last updated: 2026-06-05
 ## Contact
 
 Questions, corrections, contributions, or collaboration:
-**jr.greencove@gmail.com**
+**meridian.north@pm.me**
 
 *Not medical advice. Every decision belongs to patients and their care teams.*

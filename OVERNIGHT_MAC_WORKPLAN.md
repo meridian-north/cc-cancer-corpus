@@ -84,13 +84,21 @@ ask why — which is exactly the work no journal or registry does.*
 Everything stored carries a SHA-256 in the run manifest; the mechanism index + anomaly
 report are hashed. Proof of work = the manifest + the recreate recipe, not a hoard.
 
+Run it after the index is built:
+
+```bash
+python3 $S/cancer_why_filer.py        # -> ~/cancer_intake/why_anomalies.json
+```
+
 ---
 
-**Build status (tonight):** Phases 1–3 ready to run with the shipped tools.
-`cancer_bridge.py` is built; the FAERS kit (Phase 4) is built; the **Phase-5
-why-detector is specified here and is the next tool to build** (`cancer_why.py` —
-pulls citationCount + retraction flag, scores the evidence/attention delta, emits the
-anomaly list). Say the word and it's the first thing the next thread ships.
+**Build status (tonight): ALL FIVE PHASES SHIP.** `cancer_discover.py`,
+`cancer_kind_scraper.py`, `cancer_bridge.py`, the FAERS kit, **and now
+`cancer_why_filer.py`** are all built. Run Phases 1→5 top to bottom; the why-filer
+reads the stored studies, scores evidence vs Europe PMC citation attention, and emits
+the ranked suppression/promotion anomaly list with the why as questions. (Next
+enhancement, not tonight: independence-of-confirmation via the citation graph, and
+joining FAERS adverse-event profiles to mechanism nodes.)
 
 *No efficacy verdicts. Dose-anchored safety on every row. The method travels with the
 data; the why stays with the human.*

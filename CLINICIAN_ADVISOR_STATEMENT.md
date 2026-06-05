@@ -87,13 +87,13 @@ list is more valuable than any database.
 If you are a clinician — oncologist, integrative medicine specialist,
 pharmacist, or any practitioner who works with cancer patients — and you
 have something to add to or correct in this statement, please open an
-issue or contact jr.greencove@gmail.com.
+issue or contact meridian.north@pm.me.
 
 This statement reflects one patient-advocate's experience and perspective.
 The more voices that shape it, the more useful it becomes.
 
 ---
 
-*John Reed / jr.greencove@gmail.com*
+*John Reed / meridian.north@pm.me*
 *Patient advocate, independent researcher*
 *Not medical advice. Not a clinician.*

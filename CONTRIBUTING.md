@@ -11,7 +11,7 @@ You do not need to be a programmer to contribute.
 The `DRUG_HERB_INTERACTION_TABLE.md` is built from published literature, but
 clinical judgment about which entries matter most in practice is missing.
 If you are a clinician and you see something wrong, understated, overstated,
-or missing — open an issue or email jr.greencove@gmail.com.
+or missing — open an issue or email meridian.north@pm.me.
 
 **Evidence additions**
 If you know of a published paper (with a real DOI or PMID) that belongs in the
@@ -67,4 +67,4 @@ If your contribution meets that standard, it belongs here.
 
 ---
 
-*Contact: jr.greencove@gmail.com*
+*Contact: meridian.north@pm.me*

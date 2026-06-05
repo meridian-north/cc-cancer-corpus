@@ -32,5 +32,13 @@
    "source_class": "small_human_cohort",
    "doi": "10.1038/s41586-024-08508-4",
    "open_expected": false,
-   "note": "Claude-verified from Grok Job-B lead. Nature 2024. Phase I, 16 pts; 8 responders, durable RFS. Partial-concordance: strong preclinical immunogenicity -> only ~half respond; discordance_question = why most predicted neoantigens fail to elicit response."}
+   "note": "Claude-verified from Grok Job-B lead. Nature 2024. Phase I, 16 pts; 8 responders, durable RFS. Partial-concordance: strong preclinical immunogenicity -> only ~half respond; discordance_question = why most predicted neoantigens fail to elicit response."},
+
+  {"id": "eldeiry_kuperwasser_oncotarget_2026",
+   "title": "COVID vaccination and post-infection cancer signals: Evaluating patterns and potential biological mechanisms.",
+   "source_class": "systematic_review",
+   "doi": "10.18632/oncotarget.28824",
+   "pmid": "41498242",
+   "open_expected": true,
+   "note": "El-Deiry+Kuperwasser. Oncotarget 2026. WHY-axis keystone: 69 publications, 333 patients, 3 population cohorts (Italy ~300K, Korea ~8.4M, US military ~1.3M). Hematologic malignancies + solid tumors in temporal association with COVID-19 vaccination/infection. Senate hearing June 3 2026. Bridges VAERS pharmacovigilance signal (WHEN corpus) to cancer mechanism corpus (HOW). Recurrent themes: rapid progression/reactivation, tumor dormancy disruption, immune escape, microenvironmental shifts."}
 ]
