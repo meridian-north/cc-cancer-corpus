@@ -15,3 +15,9 @@ files/
 
 # set your contact before committing the tools; do not commit a real personal email by accident
 # (CONTACT_EMAIL is a placeholder in the .py files until you set it)
+
+# Dr Wei personal correspondence — kept locally, not for public repo
+DR_WEI_EMAIL_exercise_rest_inquiry.md
+DR_WEI_BRIEF_2026-06-03.md
+DR_WEI_CLAUDE_PROMPT.md
+DR_WEI_collaboration_chinese_sourcing_prompts.md
