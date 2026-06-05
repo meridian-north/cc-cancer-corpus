@@ -94,6 +94,6 @@ The more voices that shape it, the more useful it becomes.
 
 ---
 
-*John Reed / meridian.north@pm.me*
+*meridian.north@pm.me*
 *Patient advocate, independent researcher*
 *Not medical advice. Not a clinician.*

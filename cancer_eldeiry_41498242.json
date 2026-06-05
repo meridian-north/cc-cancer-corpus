@@ -1,0 +1,12 @@
+{
+  "pmid": "41498242",
+  "title": "COVID vaccination and post-infection cancer signals: Evaluating patterns and potential biological mechanisms.",
+  "journal": null,
+  "year": "2026",
+  "doi": "10.18632/oncotarget.28824",
+  "abstract": "A growing number of peer-reviewed publications have reported diverse cancer types appearing in temporal association with COVID-19 vaccination or infection. To characterize the nature and scope of these reports, a systematic literature search from January 2020 to October 2025 was conducted based on specified eligibility criteria. A total of 69 publications met inclusion criteria: 66 article-level reports describing 333 patients across 27 countries, 2 retrospective population-level investigations (Italy: ~300,000 cohort, and Korea: ~8.4 million cohort) quantified cancer incidence and mortality trends among vaccinated populations, and one longitudinal analysis of ~1.3 million US miliary service members spanning the pre-pandemic through post-pandemic periods. Most of the studies documented hematologic malignancies (non-Hodgkin's lymphomas, cutaneous lymphomas, leukemias), solid tumors (breast, lung, melanoma, sarcoma, pancreatic cancer, and glioblastoma), and virus-associated cancers (Kaposi and Merkel cell carcinoma). Across reports, several recurrent themes emerged: (1) unusually rapid progression, recurrence, or reactivation of preexisting indolent or controlled disease, (2) atypical or localized histopathologic findings, including involvement of vaccine injection sites or regional lymph nodes, and (3) proposed immunologic links between acute infection or vaccination and tumor dormancy, immune escape, or microenvironmental shifts. The predominance of case-level observations and early population-level data demonstrates an early phase of potential safety-signal detection. These findings underscore the need for rigorous epidemiologic, longitudinal, clinical, histopathological, forensic, and mechanistic studies to assess whether and under what conditions COVID-19 vaccination or infection may be linked with cancer.",
+  "authors": "Kuperwasser C, El-Deiry WS.",
+  "is_open_access": "Y",
+  "source": "europepmc",
+  "note": "El-Deiry lab \u2014 cancer diagnoses after COVID-19 vaccination/infection. Senate hearing June 3 2026. Keystone WHY-axis paper bridging pharmacovigilance and cancer mechanism corpora."
+}

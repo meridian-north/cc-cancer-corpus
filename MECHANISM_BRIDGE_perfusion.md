@@ -1,7 +1,7 @@
 # Mechanism bridge #2 — the tumor-perfusion / vascular-normalization / hypoxia node
 
 *The second HOW-bridge. This is the node the sovereign's own complete response turned
-on, and AntiCancer360's core tenet lives here: get the treatment to the target by
+on, and the clinical partner's core tenet lives here: get the treatment to the target by
 fixing the delivery. Hypothesis-generating, evidence-classed, no efficacy verdicts.*
 
 ---

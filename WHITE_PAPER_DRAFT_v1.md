@@ -2,7 +2,7 @@
 
 ### A white paper — first draft
 
-*GarrisonNode × AntiCancer360. Prepared by jr / John Reed (L4) for Dr. Gene Wei,
+*GarrisonNode × the clinical partner. Prepared by jr for our clinical advisor,
 DOM AP. Draft v1, 2026-06-03. For partner review — not for publication.*
 
 ---
@@ -151,7 +151,7 @@ being the **cancer itself progressing**, the clearest possible reminder that a c
 is a lead, not a verdict.
 
 The same one-line method applies to carboplatin, temozolomide, the immunotherapy
-families, and any supplement or substance Wei's clients use — including the
+families, and any supplement or substance the advisor's clients use — including the
 supplement–drug **co-report** signals (flagged as leads to investigate, never as
 interactions). The catalog of ready-to-run queries ships with this package
 (`FAERS_QUERY_KIT_CATALOG.md`).
@@ -162,13 +162,13 @@ interactions). The catalog of ready-to-run queries ships with this package
 
 This is a collaboration between equals contributing different things.
 
-- **jr / John Reed** donates time and funding to the work (as he has before), and
+- **jr** donates time and funding to the work (as he has before), and
   brings the substrate — the grammar, the tools, the attestation.
-- **Dr. Gene Wei** brings clinical partnership and domain judgment — the expertise
+- **our clinical advisor** brings clinical partnership and domain judgment — the expertise
   that keeps the method honest, relevant to real patients, and safe. His specific
   markers and measures remain **his**, private and proprietary.
 
-Neither surrenders data. Wei runs the tools on his own data, on his own machine, and
+Neither surrenders data. the advisor runs the tools on his own data, on his own machine, and
 keeps what is his. What he contributes to the federation, if anything, is
 public-derivable or aggregate — never the raw private dimensions.
 
@@ -192,4 +192,4 @@ the core so the people can care for the edges.
 ---
 
 *Draft v1 for partner review. Hypothesis-generating, not causal. Not medical advice;
-not an efficacy claim. Prepared for Dr. Gene Wei, AntiCancer360, by GarrisonNode.*
+not an efficacy claim. Prepared for our clinical advisor, the clinical partner, by GarrisonNode.*

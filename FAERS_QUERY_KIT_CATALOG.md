@@ -1,4 +1,4 @@
-# FAERS Query-Kit Catalog — ready-to-run methods for Dr. Wei
+# FAERS Query-Kit Catalog — ready-to-run methods for our clinical advisor
 
 *openFDA drug-adverse-event API. Public, free, no data stored. Each kit returns
 results + method + a pointer to the source. Verified live 2026-06-03; FAERS data
@@ -144,7 +144,7 @@ MISTLETOE, FENBENDAZOLE, MEBENDAZOLE, IVERMECTIN, "METHYLENE BLUE", "CHLORINE DI
 
 ---
 
-## The "results + methods + pointers" contract (what Wei gets back, and gives back)
+## The "results + methods + pointers" contract (what the advisor gets back, and gives back)
 
 For any question, the deliverable is three parts, never the raw dump:
 
@@ -153,7 +153,7 @@ For any question, the deliverable is three parts, never the raw dump:
 3. **Pointer** — `api.fda.gov/drug/event.json`, the FAERS `last_updated` date, and
    (for published artifacts) a SHA-256 of the saved result + an as-of timestamp.
 
-Wei runs these on his own; nothing is stored on our side. When he wants to contribute
+the advisor runs these on his own; nothing is stored on our side. When he wants to contribute
 a finding to the federation, he contributes the **result + method + pointer** — never
 his patients' rows. His private markers and measures stay his.
 
