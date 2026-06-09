@@ -74,7 +74,9 @@ python3 query_index.py --crossroads     # mechanism crossroads (oxidative-stress
 The lightweight index + samples + analytics live here in `data/`; the full index with
 abstracts and the complete Duke database (~44 MB) are on the public Proton mirror.
 
-*(Proton link goes here once uploaded.)*
+The mirror is the **`cc-cancer-corpus`** silo on Proton Drive (public, no account, every
+file SHA-256 verifiable against `MANIFEST_SHA256.txt`):
+<https://drive.proton.me/urls/Z90MDSAQ9W#YhIrSCETc0Zt>
 
 ---
 
@@ -148,8 +150,8 @@ This corpus is under active development. Evidence levels are explicit and
 conservative. Where evidence is limited to preclinical or in vitro studies,
 that is stated. Where the evidence is contested, that is stated too.
 
-Current attestation anchor: `72e2860`
-Last updated: 2026-06-05
+Current attestation anchor: `358c490`
+Last updated: 2026-06-09
 
 ---
 
