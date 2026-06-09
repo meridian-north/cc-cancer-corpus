@@ -35,6 +35,33 @@ many targeted therapies and immunosuppressants.
 | Charbroiled / smoked meats | Mild | Heterocyclic amines induce CYP1A2 and CYP3A4 | Observational |
 | Tobacco smoke | Moderate | Active smoking induces CYPs; affects many drugs | Clinical |
 
+### Worked example — Echinacea: one agent, three states (the "look over your shoulder" case)
+
+Echinacea is the clearest case in this table that an interaction warning is
+**state-dependent** — a property of the agent *in a context*, not of the herb alone.
+And the person most likely to take it (self-prescribing "immune support") is exactly the
+person who cannot see the warning without a second set of eyes — clinician, this table, or
+a BitNet flag. Same agent, three honest states:
+
+| Context (state) | Read | Evidence |
+|---|---|---|
+| **Not on cancer therapy** | Plausibly safe / beneficial — short-term immune support | Traditional + some RCTs (colds) |
+| **On a CYP3A4-metabolized chemo** (docetaxel, paclitaxel, vinca alkaloids, etoposide…) | **WARN** — Echinacea induces CYP3A4; a clinical PK trial showed **reduced docetaxel blood levels**, and lower exposure can mean lower efficacy | Clinical trial |
+| **On a checkpoint inhibitor** (pembrolizumab/Keytruda…) | **CAUTION** — immune stimulation of uncertain direction layered on immunotherapy | Observational / case reports |
+
+**Carboplatin specifically — a second-look catch.** Carboplatin is a platinum agent cleared
+**renally** and dosed by GFR; it is **not** a CYP3A4 substrate, so the documented CYP-induction
+mechanism above does **not** lower carboplatin exposure the way it lowers docetaxel. The residual
+Echinacea + carboplatin concern is the general "immunomodulator of uncertain direction during
+cytotoxic therapy" caution — real, but lower-evidence than the docetaxel and checkpoint cases.
+Naming the right drug *strengthens* the warning: the hard evidence sits on **docetaxel** and
+**checkpoint inhibitors**, not the platinum. That distinction is the whole argument for the
+over-the-shoulder review — no single keeper, human or AI, reliably catches it alone.
+
+*Composes with PleiotropyStratificationMt (the state lives in cohort + context, not the molecule),
+the `herb_drug_interaction_cyp_pgp` node, and DoseAnchoredSafetyDisclosureMt. BitNet-flaggable as
+agent × drug-class × context → warn / caution / safe.*
+
 ### Inhibitors (slow drug clearance — may increase side effects or toxicity)
 
 | Substance | Strength | Notes | Evidence |

@@ -46,7 +46,7 @@ QUERIES = [
     # mechanism / oncology integrative
     "integrative oncology", "anticancer natural products", "cancer mechanism of action",
     "natural compound cancer", "repurposed drugs cancer",
-    # the component themes jr is deepening
+    # the component themes the project is deepening
     "terpene pharmacology", "cannabinoid cancer", "polyphenol cancer",
     # herb-drug interaction (the safety keystone)
     "herb drug interaction", "cytochrome p450 herb interaction",

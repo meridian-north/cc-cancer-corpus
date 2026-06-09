@@ -1,0 +1,13 @@
+node,papers,year_min,year_max,top_source_class,top_cohort
+oxidative_stress_redox,2725,1995,2026,international_literature,breast
+p53_apoptosis_cell_cycle,902,1997,2026,international_literature,breast
+immune_checkpoint,806,1995,2026,narrative_review,breast
+perfusion_vascular_hypoxia,691,1996,2026,narrative_review,breast
+metabolic_fasting_glycolysis,555,2010,2026,narrative_review,breast
+cannabinoid_endocannabinoid,410,1994,2026,narrative_review,breast
+herb_drug_interaction_cyp_pgp,362,1997,2026,international_literature,breast
+dna_damage_parp,277,1998,2026,international_literature,breast
+electron_transport_oxphos,253,2000,2026,international_literature,breast
+microtubule_mitosis,110,1984,2026,international_literature,breast
+spike_vaccine_cancer_signal,74,1998,2026,rct,glioma_gbm
+vaccine_cancer_specifically,1,2026,2026,systematic_review,glioma_gbm

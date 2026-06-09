@@ -1,0 +1,13 @@
+node,1980s,1990s,2000s,2010s,2020s,unknown
+oxidative_stress_redox,0,12,61,229,2423,0
+p53_apoptosis_cell_cycle,0,3,22,77,800,0
+immune_checkpoint,0,4,9,44,749,0
+perfusion_vascular_hypoxia,0,2,12,46,630,1
+metabolic_fasting_glycolysis,0,0,0,47,508,0
+cannabinoid_endocannabinoid,0,3,9,32,366,0
+herb_drug_interaction_cyp_pgp,0,2,21,48,291,0
+dna_damage_parp,0,1,10,30,236,0
+electron_transport_oxphos,0,0,10,36,207,0
+microtubule_mitosis,2,3,3,13,89,0
+spike_vaccine_cancer_signal,0,1,2,1,70,0
+vaccine_cancer_specifically,0,0,0,0,1,0

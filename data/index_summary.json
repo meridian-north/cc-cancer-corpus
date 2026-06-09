@@ -1,0 +1,92 @@
+{
+  "papers_total": 6358,
+  "with_abstract": 5369,
+  "multi_node": 1943,
+  "unnoded": 2074,
+  "with_cohort_tag": 2533,
+  "node_counts": {
+    "oxidative_stress_redox": 2725,
+    "p53_apoptosis_cell_cycle": 902,
+    "immune_checkpoint": 806,
+    "perfusion_vascular_hypoxia": 691,
+    "metabolic_fasting_glycolysis": 555,
+    "cannabinoid_endocannabinoid": 410,
+    "herb_drug_interaction_cyp_pgp": 362,
+    "dna_damage_parp": 277,
+    "electron_transport_oxphos": 253,
+    "microtubule_mitosis": 110,
+    "spike_vaccine_cancer_signal": 74,
+    "vaccine_cancer_specifically": 1
+  },
+  "source_class": {
+    "international_literature": 1840,
+    "narrative_review": 1573,
+    "rct": 808,
+    "trial_registry": 783,
+    "observational": 565,
+    "clinical_trial": 425,
+    "systematic_review": 109,
+    "meta_analysis": 72,
+    "commentary": 71,
+    "preprint": 53,
+    "case_report": 41,
+    "retracted": 13,
+    "preclinical_mouse": 3,
+    "small_human_cohort": 2
+  },
+  "cohort_counts": {
+    "breast": 601,
+    "colorectal": 383,
+    "lung": 337,
+    "pancreatic": 200,
+    "ovarian": 155,
+    "liver_hcc": 148,
+    "glioma_gbm": 147,
+    "prostate": 142,
+    "leukemia": 136,
+    "gastric": 108,
+    "head_neck": 100,
+    "melanoma": 92,
+    "lymphoma": 88,
+    "sarcoma": 69,
+    "cervical": 59,
+    "bladder": 53,
+    "myeloma": 29,
+    "renal": 23,
+    "skin_nonmelanoma": 16
+  },
+  "top_crossroads": [
+    {
+      "pair": "oxidative_stress_redox + p53_apoptosis_cell_cycle",
+      "n": 500
+    },
+    {
+      "pair": "immune_checkpoint + oxidative_stress_redox",
+      "n": 427
+    },
+    {
+      "pair": "oxidative_stress_redox + perfusion_vascular_hypoxia",
+      "n": 340
+    },
+    {
+      "pair": "metabolic_fasting_glycolysis + oxidative_stress_redox",
+      "n": 283
+    },
+    {
+      "pair": "immune_checkpoint + p53_apoptosis_cell_cycle",
+      "n": 204
+    },
+    {
+      "pair": "herb_drug_interaction_cyp_pgp + oxidative_stress_redox",
+      "n": 185
+    },
+    {
+      "pair": "metabolic_fasting_glycolysis + p53_apoptosis_cell_cycle",
+      "n": 175
+    },
+    {
+      "pair": "cannabinoid_endocannabinoid + oxidative_stress_redox",
+      "n": 171
+    }
+  ]
+}

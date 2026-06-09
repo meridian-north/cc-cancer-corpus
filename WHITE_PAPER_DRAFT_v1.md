@@ -2,8 +2,8 @@
 
 ### A white paper — first draft
 
-*GarrisonNode × the clinical partner. Prepared by jr for our clinical advisor,
-DOM AP. Draft v1, 2026-06-03. For partner review — not for publication.*
+*GarrisonNode × the clinical partner. Prepared for our clinical advisor.
+Draft v1, 2026-06-03. For partner review — not for publication.*
 
 ---
 
@@ -162,8 +162,8 @@ interactions). The catalog of ready-to-run queries ships with this package
 
 This is a collaboration between equals contributing different things.
 
-- **jr** donates time and funding to the work (as he has before), and
-  brings the substrate — the grammar, the tools, the attestation.
+- **The project** donates the time, the funding, and the substrate — the
+  grammar, the tools, the attestation.
 - **our clinical advisor** brings clinical partnership and domain judgment — the expertise
   that keeps the method honest, relevant to real patients, and safe. His specific
   markers and measures remain **his**, private and proprietary.

@@ -1,0 +1,13 @@
+node,case_report,clinical_trial,commentary,international_literature,meta_analysis,narrative_review,observational,preclinical_mouse,preprint,rct,retracted,small_human_cohort,systematic_review,trial_registry
+oxidative_stress_redox,14,176,8,911,42,743,338,0,27,353,5,0,65,43
+p53_apoptosis_cell_cycle,2,34,1,430,4,276,92,0,17,23,3,0,19,1
+immune_checkpoint,12,54,7,292,2,294,60,0,14,29,3,1,11,27
+perfusion_vascular_hypoxia,6,51,5,146,27,244,29,0,7,108,2,0,17,49
+metabolic_fasting_glycolysis,2,34,3,160,5,217,31,0,13,52,4,0,8,26
+cannabinoid_endocannabinoid,0,14,3,140,5,171,35,0,1,25,0,0,13,3
+herb_drug_interaction_cyp_pgp,1,37,0,126,0,91,41,0,1,54,0,0,7,4
+dna_damage_parp,3,24,0,115,0,74,28,1,4,15,1,0,5,7
+electron_transport_oxphos,0,16,0,113,0,69,32,0,4,17,0,0,1,1
+microtubule_mitosis,1,7,1,44,0,27,20,0,3,4,0,0,2,1
+spike_vaccine_cancer_signal,0,3,0,21,0,15,6,0,4,24,0,0,1,0
+vaccine_cancer_specifically,0,0,0,0,0,0,0,0,0,0,0,0,1,0

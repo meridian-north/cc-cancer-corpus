@@ -42,6 +42,26 @@ So: characterized-safe at the water residual; **uncharacterized therapeutic-inge
 window; no established anticancer clinical evidence.** The compound's name is not the
 hazard — the dose-in-context is.
 
+**Who carries the most risk — the cohort signal (S214 addition).** That oxidative-
+hematologic harm is *not* uniform across patients; it is amplified in anyone whose red
+cells or marrow are already stressed — **active or treatment-related anemia,
+transfusion-dependence, iron-deficiency or other iron-handling disorders, and especially
+G6PD deficiency** (a classic oxidative-hemolysis trigger). For these cohorts a stressor
+that ruptures red cells and cuts oxygen-carrying capacity runs straight at the reserve
+they can least afford. Per the pleiotropy/stratification rule, the danger lives in
+**cohort + context**, not in the molecule alone — so this is a row that must carry its
+at-risk-cohort flag, not just a generic warning.
+
+**Characterizing it beats inferring it — the markers (S214 addition).** Sensory aversion
+(the taste, the vapors up the nose) gates the *acute gastrointestinal* dose, **not** the
+oxidative red-cell mechanism — which can run below that threshold and accumulate or
+present with delay. So "felt fine" is an inference, not a measurement. The cheap,
+concrete way to turn "seems fine" into *characterized* data is bloodwork across the
+dosing window: **methemoglobin level (co-oximetry), haptoglobin (falls in hemolysis),
+LDH (rises), reticulocyte count (compensatory rise), indirect bilirubin, and the
+hemoglobin trend.** Until those are checked, "no harm" is a guess in a lab coat —
+characterized-safe only at the water residual, uncharacterized at therapeutic ingestion.
+
 ## The bridge: what *else* hits the electron-transport / OXPHOS node
 
 Cluster these by HOW and the two tracks line up on one target. Each tagged by where it

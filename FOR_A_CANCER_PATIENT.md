@@ -144,7 +144,7 @@ and unproven. Some of it is wishful. The tool tries to show you which is which.
 
 ---
 
-*This is not medical advice. Written by jr, a patient advocate and
+*This is not medical advice. Written by a patient advocate and
 independent researcher who builds infrastructure for health data transparency.
 Every treatment decision belongs to you and your clinician.*
 

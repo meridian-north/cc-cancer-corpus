@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: "Cancer literature + mechanism corpus — open index"
+message: "If you use this index, please cite it."
+type: dataset
+authors:
+  - name: "Garrison Node Project"
+abstract: >
+  An open, index-and-links corpus of 6,358 conventional and complementary cancer
+  studies, each identifier-verified, classified by evidence type, and tagged by
+  biological mechanism (12 nodes), with abstracts where openly available and a link
+  to each source. Includes the public-domain USDA Duke Phytochemical & Ethnobotanical
+  Database as the complementary-track mechanism substrate. Hypothesis-generating; not
+  medical advice.
+keywords:
+  - pharmacovigilance
+  - cancer
+  - mechanism of action
+  - ethnobotany
+  - open data
+license: CC0-1.0
+license-url: "https://creativecommons.org/publicdomain/zero/1.0/"

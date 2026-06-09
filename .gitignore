@@ -1,20 +1,75 @@
-# Private Meridian North sub-repo — hygiene
-# Never commit identified/private material or local scrape output.
-*_IDENTIFIED*
-*PRIVATE*
-seed_record_private*
-__pycache__/
-*.pyc
-.DS_Store
+# ============================================================================
+# DEFAULT-DENY whitelist. Everything is ignored unless explicitly allowed below.
+# This is the safety that stops a stray `git add -A` from publishing local drafts,
+# correspondence, or notes. To make a NEW file public you MUST add a `!/<name>`
+# line here on purpose — git cannot see it otherwise. Drafts/correspondence: just
+# leave them out of this list (or under private/) and they can never leak.
+# ============================================================================
 
-# local scrape output lives in ~/cancer_intake, not here — but guard anyway
-cancer_intake/
-discovered_feedstock.json
-manifest.jsonl
-files/
+# 1) ignore everything at the repo root
+/*
 
-# set your contact before committing the tools; do not commit a real personal email by accident
-# (CONTACT_EMAIL is a placeholder in the .py files until you set it)
+# 2) but keep this file itself
+!/.gitignore
 
-# personal correspondence + sensitive drafts — kept locally, not for public repo
-private/
+# 3) and allow ONLY the curated public set:
+!/ASK_AI_YOUR_QUESTION.md
+!/CLINICIAN_ADVISOR_STATEMENT.md
+!/CONTRIBUTING.md
+!/DISCLAIMER_AND_SCOPE.md
+!/DRUG_HERB_INTERACTION_TABLE.md
+!/FAERS_QUERY_KIT_CATALOG.md
+!/FEEDSTOCK_INTAKE_v2_scored.md
+!/FIRST_SCAN_KITS_round1.md
+!/FOR_A_CANCER_PATIENT.md
+!/FOR_A_DOCTOR.md
+!/FOR_A_RESEARCHER.md
+!/FOR_A_STRANGER.md
+!/GEMINI_FEEDSTOCK_SOURCING_PROMPT.md
+!/"GEMINI_FEEDSTOCK_SOURCING_PROMPT_v2 copy.md"
+!/GEMINI_FEEDSTOCK_SOURCING_PROMPT_v2.md
+!/GROK_CROSSCHECK_AND_SOURCE_PROMPT.md
+!/IMPPAT2_INGESTION.md
+!/MECHANISM_BRIDGE_electron_transport.md
+!/MECHANISM_BRIDGE_perfusion.md
+!/MOA_compendium_seed.md
+!/OVERNIGHT_MAC_WORKPLAN.md
+!/PEER_FOLLOWUP_gemini_grok_round1_close.md
+!/PEER_PRIMARY_COVERAGE_CROSSCHECK_round2.md
+!/PEER_VERIFICATION_round2_report.md
+!/README.md
+!/WHITE_PAPER_DRAFT_v1.md
+!/WHY_FORK_INVESTIGATION_TEMPLATE.md
+!/agent_queries.txt
+!/cancer_bridge.py
+!/cancer_discover.py
+!/cancer_eldeiry_41498242.json
+!/cancer_kind_scraper.py
+!/cancer_why_filer.py
+!/duke_ingest.py
+!/duke_verify.py
+!/feedstock_round1.json
+!/feedstock_round1_candidates.json
+!/reclass_evidence.py
+!/run_corpus_sweep.sh
+!/run_overnight.sh
+!/seed_record_public_GN-CASE-LUNGADENO-0001.md
+!/verified_feedstock_round2.json
+!/wiki_repo_discover.py
+
+# note: private/ , files/ , manifest.jsonl , *.log etc. are covered by the /* deny
+# above — no explicit rule needed. Set CONTACT_EMAIL in the .py tools before adding them.
+
+
+# --- mechanism index + data release (added 2026-06) ---
+!/THE_INDEX.md
+!/MECHANISM_MAP.md
+!/BRIDGE_TO_SEVEN_SYSTEMS.md
+!/DUKE_TABLES.md
+!/LICENSING.md
+!/LICENSE
+!/CITATION.cff
+!/query_index.py
+!/mechanism_index.json
+!/data/
+!/data/**

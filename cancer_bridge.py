@@ -92,6 +92,63 @@ NODES = {
         "auc", "area under the curve", "efflux transporter", "enzyme induction",
         "enzyme inhibition", "pharmacokinetic interaction", "clearance", "antagonism",
         "reduced response", "proteasome inhibitor", "bortezomib"],
+    # tumor sensitization (S214) — what makes a tumour MORE susceptible (radio/chemo/
+    # immuno). A pleiotropic axis: 'sensitization' can mean therapeutic potentiation OR
+    # unwanted susceptibility; the SIGN is read from cohort + tumour context, never as a
+    # verdict from co-location. Pattern surfaced from the Lin/Nature ICI paper.
+    "tumor_sensitization": [
+        "sensitiz", "radiosensitiz", "chemosensitiz", "immunosensitiz", "resensitiz",
+        "potentiat", "synergistic", "abscopal", "overcome resistance",
+        "overcoming resistance", "restore sensitivity", "reverse resistance",
+        "immune priming", "susceptibility to therapy", "treatment sensitization"],
+}
+
+# --- stratifiers for the 'kit' (S214): effect SIGN lives in cohort + tumour context,
+# not the molecule. The lens facets sensitization (and any node) by these so the
+# pattern-surface is reproducible across whoever re-runs the kit. ---
+COHORT = {
+    "melanoma": ["melanoma"],
+    "lung": ["lung cancer", "nsclc", "sclc", "non-small cell lung", "small cell lung", "lung adenocarcinoma"],
+    "breast": ["breast cancer", "breast carcinoma", "triple-negative", "her2"],
+    "glioma_gbm": ["glioblastoma", "glioma", "gbm"],
+    "lymphoma": ["lymphoma", "hodgkin", "non-hodgkin"],
+    "leukemia": ["leukemia", "leukaemia", "cll", "aml"],
+    "myeloma": ["multiple myeloma", "myeloma"],
+    "pancreatic": ["pancreatic"],
+    "colorectal": ["colorectal", "colon cancer", "rectal cancer"],
+    "prostate": ["prostate cancer", "prostate carcinoma"],
+    "ovarian": ["ovarian"],
+    "liver_hcc": ["hepatocellular", "liver cancer", "hcc"],
+    "sarcoma": ["sarcoma"],
+    "renal": ["renal cell", "kidney cancer"],
+    "bladder": ["bladder cancer", "urothelial"],
+    "gastric": ["gastric cancer", "stomach cancer"],
+    "head_neck": ["head and neck", "hnsc", "laryngeal"],
+    "cervical": ["cervical cancer"],
+    "skin_nonmelanoma": ["merkel", "kaposi", "basal cell"],
+}
+TUMOR_CONTEXT = {
+    "cold_tumor": ["cold tumor", "cold tumour", "immunologically cold", "non-inflamed"],
+    "hot_tumor": ["hot tumor", "hot tumour", "t cell-inflamed", "t-cell inflamed"],
+    "dormant": ["dormancy", "dormant", "minimal residual", "indolent"],
+    "metastatic": ["metastatic", "metastasis", "metastases", "stage iv"],
+    "primary_localized": ["primary tumor", "primary tumour", "localized", "early-stage", "resectable"],
+    "recurrent_refractory": ["recurrent", "recurrence", "relapsed", "refractory", "treatment-resistant"],
+    "immunosuppressed": ["immunosuppress", "immunocompromised", "immune evasion", "immune escape"],
+    "microenvironment": ["tumor microenvironment", "tumour microenvironment", "pd-l1"],
+    "hypoxic": ["hypoxia", "hypoxic"],
+}
+
+# Friendly aliases -> canonical node keys, so a near-miss name resolves instead
+# of silently returning "(0 items)" — the fail-loud discipline (SelfGuardingInstructionMt,
+# S214). The 0-item confusion that started this was exactly an unknown-name miss.
+ALIASES = {
+    "p53_tumor_suppressor": "p53_apoptosis_cell_cycle",
+    "tumor_suppressor": "p53_apoptosis_cell_cycle",
+    "p53": "p53_apoptosis_cell_cycle",
+    "spike_protein_cancer": "spike_vaccine_cancer_signal",
+    "spike_cancer": "spike_vaccine_cancer_signal",
+    "vaccine_cancer": "vaccine_cancer_specifically",
 }
 
 def load_items():
@@ -175,9 +232,22 @@ def main():
     with open(out, "w") as f:
         json.dump(idx, f, indent=2)
     if "--node" in a:
-        node = a[a.index("--node") + 1]
+        raw = a[a.index("--node") + 1]
+        node = ALIASES.get(raw, raw)
+        if node not in NODES:
+            # fail LOUD — never let an unknown name look like an empty node (S214)
+            import difflib
+            guess = difflib.get_close_matches(raw, list(NODES) + list(ALIASES), n=3)
+            print(f"\n!! no such node: '{raw}'")
+            if guess:
+                print("   did you mean:  " + ",  ".join(guess))
+            print("   valid nodes:  " + ",  ".join(NODES))
+            return
+        if node != raw:
+            print(f"(alias '{raw}' -> '{node}')")
         rows = idx.get(node, [])
-        print(f"\n=== HOW-bridge: {node}  ({len(rows)} items) ===")
+        state = "EMPTY — node exists, 0 matches" if not rows else f"{len(rows)} items"
+        print(f"\n=== HOW-bridge: {node}  ({state}) ===")
         for r in rows:
             print(f"  - {r['title'][:90] if r.get('title') else r['id']}  [{r.get('source_class')}]  {r.get('pointer')}")
     else:

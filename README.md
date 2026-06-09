@@ -47,6 +47,37 @@ answers you can bring to your oncologist.
 
 ---
 
+## The mechanism index — 6,358 studies you can query
+
+Behind the audience docs is the data layer: a searchable index of **6,358** verified
+cancer studies, each tagged by biological mechanism (12 nodes) and tumor type, with an
+abstract where openly available and a link to every source. It ships
+**index-and-links only** — metadata and tags, never rehosted paywalled full text.
+
+- **[THE_INDEX.md](THE_INDEX.md)** — the data layer: fields, the `query_index.py` tool
+  (no setup, no network), and the analytics pack.
+- **[MECHANISM_MAP.md](MECHANISM_MAP.md)** — the 12 mechanism nodes, the trigger
+  lexicon behind each, and the counts.
+- **[BRIDGE_TO_SEVEN_SYSTEMS.md](BRIDGE_TO_SEVEN_SYSTEMS.md)** — how this connects to
+  the seven-system pharmacovigilance federation (on concepts, not columns) and to FAERS.
+- **[DUKE_TABLES.md](DUKE_TABLES.md)** — the public-domain USDA Duke phytochemical
+  database (the complementary-track substrate).
+
+Query it without installing anything:
+
+```
+python3 query_index.py --summary
+python3 query_index.py --node immune_checkpoint --class rct
+python3 query_index.py --crossroads     # mechanism crossroads (oxidative-stress × p53: 500 studies)
+```
+
+The lightweight index + samples + analytics live here in `data/`; the full index with
+abstracts and the complete Duke database (~44 MB) are on the public Proton mirror.
+
+*(Proton link goes here once uploaded.)*
+
+---
+
 ## All documents
 
 | Document | Audience | What it covers |
@@ -63,6 +94,11 @@ answers you can bring to your oncologist.
 | [MECHANISM_BRIDGE_electron_transport.md](MECHANISM_BRIDGE_electron_transport.md) | Researchers | Electron transport / OXPHOS node analysis |
 | [MECHANISM_BRIDGE_perfusion.md](MECHANISM_BRIDGE_perfusion.md) | Researchers | Tumor perfusion node analysis |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Contributors | How to add papers, corrections, or feedback |
+| [THE_INDEX.md](THE_INDEX.md) | Researchers / everyone | The queryable index: fields, query tool, analytics pack |
+| [MECHANISM_MAP.md](MECHANISM_MAP.md) | Researchers | The 12 mechanism nodes + trigger lexicon + counts |
+| [BRIDGE_TO_SEVEN_SYSTEMS.md](BRIDGE_TO_SEVEN_SYSTEMS.md) | Researchers | Link to the pharmacovigilance federation + FAERS |
+| [DUKE_TABLES.md](DUKE_TABLES.md) | Researchers | USDA Duke phytochemical database: schema + provenance |
+| [LICENSING.md](LICENSING.md) | Everyone | The licensing layers (code / index / Duke / abstracts) |
 
 ---
 
@@ -78,6 +114,10 @@ The corpus is built from three Python scripts that run against public databases
 Running `python3 cancer_bridge.py --node electron_transport_oxphos` returns all
 papers in the corpus that act on the electron transport chain — across conventional
 drugs, repurposed agents, and complementary compounds — with evidence levels.
+
+The index now **ships with the repo**, so `python3 query_index.py --node
+electron_transport_oxphos` runs that query against the shipped data directly — no
+intake folder and no network needed. See [THE_INDEX.md](THE_INDEX.md).
 
 No LLMs in the discovery pipeline. Sources are real identifiers verified against
 their registries. Full methodology: [WHITE_PAPER_DRAFT_v1.md](WHITE_PAPER_DRAFT_v1.md).
