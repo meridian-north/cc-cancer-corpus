@@ -73,3 +73,23 @@
 !/mechanism_index.json
 !/data/
 !/data/**
+
+# --- method/secret-sauce: never publish (added 2026-06-10) ---
+*FEEDSTOCK_SOURCING_PROMPT*
+*CROSSCHECK_AND_SOURCE*
+WHY_FORK_INVESTIGATION_TEMPLATE.md
+PEER_*.md
+FEEDSTOCK_*.md
+FIRST_SCAN_KITS_*.md
+feedstock_*.json
+verified_feedstock_*.json
+OVERNIGHT_*_WORKPLAN.md
+run_overnight.sh
+run_corpus_sweep.sh
+agent_queries.txt
+seed_record_*GN-*.md
+cancer_discover.py
+cancer_why_filer.py
+cancer_kind_scraper.py
+wiki_repo_discover.py
+reclass_evidence.py
