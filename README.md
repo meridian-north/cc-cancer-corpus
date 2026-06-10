@@ -12,6 +12,23 @@ published source. The tool organizes; you and your care team decide.
 
 ---
 
+## Use it in your browser — no install, no account
+
+**[▶ Open the Cancer Map Reader](https://meridian-north.github.io/cc-cancer-corpus/cancer_index.html)**
+
+A point-and-click front end to the whole index — no terminal, no setup. Browse the
+12 mechanism nodes (the *path of effect*), the evidence classes, and the tumor cohorts;
+search any agent by name; and save your results (the caveats travel inside the file).
+It runs entirely in your browser and sends nothing anywhere.
+
+Prefer to work offline? Use the green **Code** button → **Download ZIP**, unzip, open
+**cancer_index.html**, and choose **data/cancer_index_v2_schema.csv** when it asks for a file.
+
+> A map of the literature, not medical advice. Indexed presence is not efficacy;
+> co-location at a mechanism is a question, never a verdict. Leads, not verdicts.
+
+---
+
 ## Start here — based on who you are
 
 | I am... | Go to |
