@@ -9,6 +9,18 @@
   to act — not whether it works. A tool, not medical advice. Indexed presence is
   not efficacy; co-location at a node is a question, never a verdict. One standard
   for every agent. Counts are a floor. Leads, not verdicts.
+
+  BUILD RULES — presentation invariants (S221 IA review; do not regress):
+  1. STRATIFIED COUNTS: a bare aggregate must show its per-class composition
+     inline in the same element, so volume cannot read as quality.
+  2. CLASS-FIRST SORT: results and the evidence-class facet order by study-design
+     class (a methodology hierarchy, NOT efficacy); count is an in-class tiebreaker
+     only. The order is auditable on screen.
+  3. PER-ROW EVIDENCE CLASS: evidence_class leads every result row — visible at
+     the row, not only behind a facet.
+  4. UNIFORM CONTRAST: no opacity or contrast change keyed to record class, ever.
+     A bench-level or retracted row is different data, not lesser data; it is kept,
+     shown, and sorted by position only — never dimmed (Red Line 5).
 -->
 <html lang="en">
 <head>
@@ -126,6 +138,9 @@
     <b>literature index — not medical advice — indexed presence is not efficacy — correlation is not causation.</b>
     A row means a paper <b>exists and was indexed</b> under a mechanism — not that an agent works and not that it is safe.
     One standard grades every agent. A field a source cannot report shows <b>"unavailable" — never zero</b>.
+  Results order by <b>study-design class first</b> (how the evidence was gathered), highest design at the top;
+  count is only a tiebreaker within a class. Design rank is methodology, not efficacy — it says nothing about
+  whether any agent works.
   </div>
 
   <div class="card">
@@ -168,7 +183,9 @@
     <p class="hint">Click any item to filter. Every facet shows its count.</p>
     <div style="margin-top:6px"><label>Path of effect — mechanism nodes (how the agent is proposed to act)</label>
       <div id="nodeChips"></div></div>
-    <div style="margin-top:12px"><label>Evidence class</label><div id="classChips"></div></div>
+    <div style="margin-top:12px"><label>Evidence class — listed by study-design strength (how the evidence was gathered), not by count</label><div id="classChips"></div>
+      <details><summary>Show the study-design order used to sort (auditable — this is methodology, not efficacy)</summary>
+        <div class="lexrow" id="classOrder" style="margin-top:6px"></div></details></div>
     <div style="margin-top:12px"><label>Tumor cohort</label><div id="cohortChips"></div></div>
     <div style="margin-top:12px"><label>Quick name search (matches the study title — counts are a floor, not a verdict)</label>
       <div id="nameChips"></div></div>
@@ -257,6 +274,23 @@ const LEXICON = {
  vaccine_cancer_specifically:["vaccine-associated cancer","post-vaccination cancer","cancer after vaccination","temporal association with vaccination","rapid reactivation","reactivation of cancer","injection site lymphoma","cancer safety signal","turbo cancer","mrna vaccine cancer"],
  herb_drug_interaction_cyp_pgp:["cyp3a4","cyp1a2","cyp2c19","cyp2d6","p-glycoprotein","p-gp","pregnane x receptor","pxr","herb-drug interaction","drug interaction","auc","enzyme induction","enzyme inhibition","clearance","proteasome inhibitor","bortezomib"]
 };
+// Study-design class order (S221 build rule: class-first sort). This ranks HOW
+// the evidence was gathered — a standard methodological hierarchy — NOT whether
+// any agent works. It is one standard applied to every agent identically. Lower
+// rank number sorts higher. Auditable: the order is shown on screen in the
+// "evidence-class order" disclosure. Unknown classes sort after all known ones,
+// then alphabetically. "retracted" is ranked last so a withdrawn paper never
+// leads a result — but it is KEPT and SHOWN (flag, never fix; Red Line 5), at
+// the same visual contrast as every other row (uniform-contrast invariant).
+const CLASS_RANK = (()=>{ const order=[
+  'meta_analysis','systematic_review','rct','clinical_trial','trial_registry',
+  'observational','small_human_cohort','case_report','preclinical_mouse',
+  'international_literature','narrative_review','commentary','preprint','retracted'];
+  const m={}; order.forEach((k,i)=>m[k]=i); return m; })();
+const classRank = c => (c in CLASS_RANK ? CLASS_RANK[c] : 900);
+function sortByClassThenCount(entries){ // entries: [class, count]
+  return entries.sort((a,b)=> classRank(a[0])-classRank(b[0]) || b[1]-a[1] || String(a[0]).localeCompare(String(b[0]))); }
+
 const NODE_DESC = {
  oxidative_stress_redox:"reactive-oxygen / redox biology",
  p53_apoptosis_cell_cycle:"tumor-suppressor, programmed cell death, cycle arrest",
@@ -352,7 +386,7 @@ function sortDesc(obj){return Object.entries(obj).sort((a,b)=>b[1]-a[1]);}
 
 function buildIndexUI(){
   const nodes=sortDesc(countSplit('mechanism_nodes'));
-  const classes=sortDesc(countField('source_class'));
+  const classes=sortByClassThenCount(Object.entries(countField('source_class'))); // class-first, count tiebreak
   const cohorts=sortDesc(countSplit('cohorts'));
   $('nodeChips').innerHTML=''; $('qNode').innerHTML='<option value="">any</option>';
   for(const [k,n] of nodes){
@@ -382,6 +416,12 @@ function buildIndexUI(){
     c.innerHTML=`${name}<span class="n">${n}</span>`;c.onclick=()=>{$('qGrep').value=name;runQuery();};
     $('nameChips').appendChild(c);
   }
+  const co=$('classOrder'); if(co){ const present=new Set(Object.keys(countField('source_class')));
+    const ranked=Object.keys(CLASS_RANK).filter(k=>present.has(k));
+    const extra=[...present].filter(k=>!(k in CLASS_RANK)).sort();
+    co.innerHTML='<b>highest design first → lowest:</b> '+ranked.join(' → ')
+      +(extra.length?` <span class="muted">· unranked (sort last, alphabetical): ${extra.join(', ')}</span>`:'')
+      +' <span class="muted">· “retracted” is kept and shown, ranked last; it is never hidden or dimmed.</span>'; }
   $('lexicon').innerHTML=Object.entries(LEXICON).map(([k,v])=>
     `<div class="lexrow"><b>${k}</b> <span class="muted">(${NODE_DESC[k]||''})</span><br>${v.join(' · ')}</div>`).join('');
 }
@@ -400,19 +440,26 @@ function runQuery(){
   if(!ROWS.length){return;}
   const q={node:$('qNode').value,cohort:$('qCohort').value,cls:$('qClass').value,
     grep:$('qGrep').value.trim(),ymin:+$('qYearMin').value||0,ymax:+$('qYearMax').value||0};
-  const hits=ROWS.filter(r=>keep(r,q));
+  // Class-first sort (S221): highest study-design class at the top; within a
+  // class, newer year first as the only tiebreaker. Volume never reorders class.
+  const hits=ROWS.filter(r=>keep(r,q)).sort((a,b)=>
+    classRank(a.source_class)-classRank(b.source_class)
+    || (((b.year||'').slice(0,4))||'').localeCompare(((a.year||'').slice(0,4))||'')
+    || String(a.title).localeCompare(String(b.title)));
   const parts=[]; if(q.node)parts.push('node='+q.node); if(q.cohort)parts.push('cohort='+q.cohort);
   if(q.cls)parts.push('class='+q.cls); if(q.grep)parts.push('grep="'+q.grep+'"');
   if(q.ymin)parts.push('year≥'+q.ymin); if(q.ymax)parts.push('year≤'+q.ymax);
+  // evidence_class leads each row (S221: per-row class prominence — visible at
+  // the row, not only via the facet). Display order reflects the class-first sort.
   showResult(hits.map(r=>({
-    year:(r.year||'').slice(0,4)||'unavailable',
     evidence_class:r.source_class||'unavailable',
+    year:(r.year||'').slice(0,4)||'unavailable',
     title:r.title||'unavailable',
     mechanism_nodes:r.mechanism_nodes||'unavailable',
     cohorts:(hasCohorts?(r.cohorts||'unavailable'):'unavailable'),
     link:r.link||'unavailable',
     caveat:(r.caveat? r.caveat : ROW_CAVEAT)
-  })), `${hits.length} match${hits.length===1?'':'es'}` + (parts.length?' · '+parts.join(' · '):' · (all studies)'));
+  })), `${hits.length} match${hits.length===1?'':'es'}` + (parts.length?' · '+parts.join(' · '):' · (all studies)'), hits);
 }
 function crossroads(){
   const pair={};
@@ -422,7 +469,8 @@ function crossroads(){
   showResult(out, `Mechanism crossroads — ${out.length} co-occurring node pairs (co-location is a question, not a verdict)`);
 }
 function summary(){
-  const nodes=sortDesc(countSplit('mechanism_nodes')), cls=sortDesc(countField('source_class')),
+  const nodes=sortDesc(countSplit('mechanism_nodes')),
+        cls=sortByClassThenCount(Object.entries(countField('source_class'))),
         coh=sortDesc(countSplit('cohorts'));
   const out=[];
   out.push({facet:'TOTAL', item:'indexed studies', count:ROWS.length, caveat:ROW_CAVEAT});
@@ -433,10 +481,19 @@ function summary(){
   showResult(out, `Summary — counts by facet (counts are a floor, no denominator)`);
 }
 
-function showResult(rows, title){
+// Stratified count (S221 build rule): a bare aggregate must show its own
+// per-class composition inline, so volume never reads as quality. Built in
+// class-first order at the same visual weight for every class (uniform contrast).
+function stratLine(rows){
+  if(!rows.length || !('evidence_class' in rows[0])) return '';
+  const c={}; for(const r of rows){ const k=r.evidence_class||'unavailable'; c[k]=(c[k]||0)+1; }
+  const parts=sortByClassThenCount(Object.entries(c)).map(([k,n])=>`${k} ${n.toLocaleString()}`);
+  return ` <span class="muted">— by study-design class: ${parts.join(' · ')}</span>`;
+}
+function showResult(rows, title, srcRows){
   currentRows=rows; currentTitle=title; currentCols=rows.length?Object.keys(rows[0]):[];
   $('resultCard').style.display='block'; $('resultTitle').textContent='— '+title;
-  $('resultMeta').innerHTML=`<b>${rows.length}</b> row(s) · snapshot index ${ROWS.length.toLocaleString()} studies`;
+  $('resultMeta').innerHTML=`<b>${rows.length}</b> row(s) · snapshot index ${ROWS.length.toLocaleString()} studies`+stratLine(rows);
   const t=$('resultTable');
   if(!rows.length){ t.innerHTML='<tbody><tr><td>0 matches.</td></tr></tbody>'; $('resultCard').scrollIntoView({behavior:'smooth'}); return; }
   let h='<thead><tr>'+currentCols.map(c=>`<th>${c}</th>`).join('')+'</tr></thead><tbody>';
