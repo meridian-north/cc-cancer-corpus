@@ -77,15 +77,41 @@ h1{font-size:15px;margin-bottom:2px}
 
 /* ── TREATMENT CONTEXT ─────────────────────────────────────────── */
 .tx-context{background:var(--surface2);border:1px solid var(--border);border-radius:4px;
-  padding:9px 13px;margin-bottom:12px}
-.tx-context h3{font-size:10px;color:var(--accent2);text-transform:uppercase;
-  letter-spacing:.5px;margin-bottom:6px}
+  padding:11px 14px;margin-bottom:12px}
+.tx-context-header{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.tx-context-header h3{font-size:10px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px}
+.tx-context-header .tx-subtitle{font-size:11px;color:var(--muted)}
 .tx-row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
-.tx-field{display:flex;flex-direction:column;gap:2px;min-width:180px}
+.tx-field{display:flex;flex-direction:column;gap:2px;min-width:190px;flex:1}
 .tx-field label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
 .tx-field input,.tx-field select{background:var(--bg);border:1px solid var(--border);
-  color:var(--text);padding:4px 8px;border-radius:3px;font-family:inherit;font-size:12px}
+  color:var(--text);padding:5px 8px;border-radius:3px;font-family:inherit;font-size:12px;width:100%}
 .tx-field input:focus,.tx-field select:focus{outline:1px solid var(--accent2);border-color:var(--accent2)}
+.tx-field input::placeholder{color:var(--muted)}
+.tx-declared{background:rgba(245,158,11,0.06);border:1px solid var(--warn);border-radius:3px;
+  padding:6px 10px;margin-top:8px;font-size:10px;color:var(--warn);display:none;line-height:1.6}
+.tx-declared.show{display:block}
+.tx-summary-bar{background:var(--bg);border:1px solid var(--border);border-radius:3px;
+  padding:5px 10px;margin-top:8px;font-size:11px;color:var(--accent2);display:none}
+.tx-summary-bar.show{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tx-summary-bar .ts-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+.tx-clear{background:none;border:none;color:var(--muted);font-size:10px;cursor:pointer;
+  margin-left:auto;padding:2px 6px;border-radius:3px}
+.tx-clear:hover{color:var(--danger)}
+
+/* ── CUSTOM AUTOCOMPLETE ─────────────────────────────────────────── */
+.ms-wrap{position:relative}
+.ms-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--surface);
+  border:1px solid var(--accent2);border-radius:4px;max-height:240px;overflow-y:auto;
+  z-index:600;display:none;box-shadow:0 6px 20px rgba(0,0,0,.6)}
+.ms-dropdown.open{display:block}
+.ms-opt{padding:5px 10px;font-size:12px;cursor:pointer;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ms-opt:hover,.ms-opt.focused{background:var(--surface2);color:var(--accent2)}
+.ms-opt.ms-header{color:var(--muted);font-size:9px;padding:5px 8px 2px;cursor:default;
+  font-weight:700;letter-spacing:.5px;pointer-events:none;border-top:1px solid var(--border);margin-top:2px}
+.ms-opt.ms-header:first-child{border-top:none;margin-top:0}
+.ms-opt.ms-header:hover{background:none;color:var(--muted)}
 
 /* ── SUPPLEMENT TAB ─────────────────────────────────────────── */
 .search-bar{display:flex;gap:8px;margin-bottom:8px;align-items:center;flex-wrap:wrap}
@@ -267,6 +293,20 @@ h1{font-size:15px;margin-bottom:2px}
 
 /* misc */
 .empty-msg{color:var(--muted);font-size:12px;text-align:center;padding:24px}
+
+/* ── EMPTY STATES & RECOVERY ─────────────────────────────────────────── */
+.empty-state{background:var(--surface);border:1px solid var(--border);border-radius:6px;
+  padding:22px 18px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8;display:none}
+.empty-state.show{display:block}
+.empty-state strong{color:var(--text);display:block;font-size:13px;margin-bottom:5px}
+.empty-state .es-hint{color:var(--muted);font-size:11px;margin-bottom:10px}
+.empty-state .es-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ms-no-match{color:var(--muted);font-size:11px;padding:7px 10px;font-style:italic;cursor:default;border-top:1px solid var(--border)}
+.inline-warn{background:var(--warn-bg);border:1px solid var(--warn);border-radius:3px;
+  padding:5px 10px;font-size:11px;color:var(--warn);display:none;margin-top:5px}
+.inline-warn.show{display:block}
+.btn-flash{animation:btnFlash .4s ease}
+@keyframes btnFlash{0%{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}100%{background:var(--surface2);border-color:var(--border);color:var(--text)}}
 </style>
 </head>
 <body>
@@ -295,6 +335,7 @@ h1{font-size:15px;margin-bottom:2px}
   <button class="tab-btn" onclick="showTab('corpus',this)">Query Corpus</button>
   <button class="tab-btn" onclick="showTab('crossroads',this)">Crossroads</button>
   <button class="tab-btn" onclick="showTab('reshape',this)">Reshape Question</button>
+  <button class="tab-btn" onclick="showTab('notfound',this)" style="color:var(--accent2)">Not in Corpus? →</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -318,29 +359,384 @@ h1{font-size:15px;margin-bottom:2px}
     <div class="why-not">⚠ Where studies do not exist, we name the gap — and ask <strong>why not?</strong> Absence of research is a data point. It may reflect funding priorities, patent limitations, or regulatory history — not proof of futility.</div>
   </div>
 
-  <div class="tx-context no-print">
-    <h3>Your Treatment Context (optional — affects print header and query links)</h3>
+  <div class="tx-context no-print" id="tx-context-panel">
+    <div class="tx-context-header">
+      <h3>Your Treatment Regimen</h3>
+      <span class="tx-subtitle">Start here — this is familiar territory for your care team. The supplement cards drill down from here.</span>
+    </div>
     <div class="tx-row">
       <div class="tx-field">
-        <label>Primary Agent</label>
-        <input type="text" id="tx-agent" placeholder="e.g. pembrolizumab" oninput="updateTxContext()">
+        <label>Primary Treatment <span style="color:var(--muted);font-size:9px;text-transform:none">(any modality — drug, surgery, radiation, traditional, trial…)</span></label>
+        <input type="text" id="tx-agent" placeholder="type or select any treatment" oninput="updateTxContext()" autocomplete="off">
+        <datalist id="list-agents">
+          <optgroup label="─── SURGERY ───"></optgroup>
+          <option value="Surgery — tumor resection">
+          <option value="Surgery — lobectomy (lung)">
+          <option value="Surgery — pneumonectomy">
+          <option value="Surgery — mastectomy">
+          <option value="Surgery — lumpectomy">
+          <option value="Surgery — prostatectomy (radical)">
+          <option value="Surgery — Whipple procedure (pancreaticoduodenectomy)">
+          <option value="Surgery — colectomy / hemicolectomy">
+          <option value="Surgery — cytoreductive + HIPEC">
+          <option value="Surgery — craniotomy / brain tumor resection">
+          <option value="Surgery — neck dissection">
+          <option value="Surgery — liver resection / hepatectomy">
+          <option value="Surgery — nephrectomy">
+          <option value="Surgery — debulking (ovarian / peritoneal)">
+          <option value="Surgery — limb-sparing (sarcoma)">
+          <option value="Surgery — amputation">
+          <option value="Surgery — sentinel lymph node biopsy">
+          <option value="Surgery — orchiectomy">
+          <option value="─── RADIATION ───">
+          <option value="Radiation — EBRT (external beam)">
+          <option value="Radiation — IMRT (intensity-modulated)">
+          <option value="Radiation — VMAT / RapidArc">
+          <option value="Radiation — SBRT / SABR (stereotactic body)">
+          <option value="Radiation — SRS (stereotactic radiosurgery — Gamma Knife / CyberKnife)">
+          <option value="Radiation — proton beam therapy">
+          <option value="Radiation — brachytherapy (internal seed)">
+          <option value="Radiation — whole brain (WBRT)">
+          <option value="Radiation — total body irradiation (TBI)">
+          <option value="Radiation — Y-90 radioembolization (SIRT)">
+          <option value="Radiation — Lu-177 DOTATATE (Lutathera) — PRRT">
+          <option value="Radiation — Ra-223 (Xofigo) — bone metastases">
+          <option value="Radiation — I-131 (radioactive iodine) — thyroid">
+          <option value="─── CHECKPOINT IMMUNOTHERAPY ───">
+          <option value="Pembrolizumab (Keytruda) — anti-PD-1">
+          <option value="Nivolumab (Opdivo) — anti-PD-1">
+          <option value="Cemiplimab (Libtayo) — anti-PD-1">
+          <option value="Dostarlimab (Jemperli) — anti-PD-1">
+          <option value="Atezolizumab (Tecentriq) — anti-PD-L1">
+          <option value="Durvalumab (Imfinzi) — anti-PD-L1">
+          <option value="Avelumab (Bavencio) — anti-PD-L1">
+          <option value="Ipilimumab (Yervoy) — anti-CTLA-4">
+          <option value="Tremelimumab (Imjudo) — anti-CTLA-4">
+          <option value="Nivolumab + Ipilimumab (dual checkpoint)">
+          <option value="─── TARGETED THERAPY — LUNG ───">
+          <option value="Osimertinib (Tagrisso) — EGFR T790M">
+          <option value="Erlotinib (Tarceva) — EGFR">
+          <option value="Gefitinib (Iressa) — EGFR">
+          <option value="Afatinib (Gilotrif) — EGFR">
+          <option value="Amivantamab (Rybrevant) — EGFR/MET">
+          <option value="Alectinib (Alecensa) — ALK">
+          <option value="Brigatinib (Alunbrig) — ALK">
+          <option value="Crizotinib (Xalkori) — ALK/ROS1/MET">
+          <option value="Lorlatinib (Lorbrena) — ALK/ROS1">
+          <option value="Capmatinib (Tabrecta) — MET exon 14">
+          <option value="Tepotinib (Tepmetko) — MET exon 14">
+          <option value="Sotorasib (Lumakras) — KRAS G12C">
+          <option value="Adagrasib (Krazati) — KRAS G12C">
+          <option value="Pralsetinib (Gavreto) — RET">
+          <option value="Selpercatinib (Retevmo) — RET">
+          <option value="Entrectinib (Rozlytrek) — NTRK/ROS1">
+          <option value="─── TARGETED — BREAST / HER2 ───">
+          <option value="Trastuzumab (Herceptin) — HER2">
+          <option value="Pertuzumab (Perjeta) — HER2">
+          <option value="Trastuzumab deruxtecan (Enhertu) — HER2 ADC">
+          <option value="Ado-trastuzumab emtansine (Kadcyla) — HER2 ADC">
+          <option value="Tucatinib (Tukysa) — HER2">
+          <option value="Lapatinib (Tykerb) — HER2/EGFR">
+          <option value="Neratinib (Nerlynx) — HER2">
+          <option value="Palbociclib (Ibrance) — CDK4/6">
+          <option value="Ribociclib (Kisqali) — CDK4/6">
+          <option value="Abemaciclib (Verzenio) — CDK4/6">
+          <option value="Sacituzumab govitecan (Trodelvy) — TROP-2 ADC">
+          <option value="─── TARGETED — COLORECTAL / GI ───">
+          <option value="Bevacizumab (Avastin) — VEGF">
+          <option value="Ramucirumab (Cyramza) — VEGFR2">
+          <option value="Cetuximab (Erbitux) — EGFR">
+          <option value="Panitumumab (Vectibix) — EGFR">
+          <option value="Regorafenib (Stivarga)">
+          <option value="Trifluridine/tipiracil (Lonsurf)">
+          <option value="─── TARGETED — MELANOMA ───">
+          <option value="Vemurafenib (Zelboraf) — BRAF V600E">
+          <option value="Dabrafenib (Tafinlar) — BRAF">
+          <option value="Trametinib (Mekinist) — MEK">
+          <option value="Dabrafenib + Trametinib (combo)">
+          <option value="Encorafenib (Braftovi) — BRAF">
+          <option value="Binimetinib (Mektovi) — MEK">
+          <option value="─── TARGETED — PROSTATE ───">
+          <option value="Enzalutamide (Xtandi) — AR">
+          <option value="Abiraterone (Zytiga) — CYP17">
+          <option value="Apalutamide (Erleada) — AR">
+          <option value="Darolutamide (Nubeqa) — AR">
+          <option value="Olaparib (Lynparza) — PARP">
+          <option value="Rucaparib (Rubraca) — PARP">
+          <option value="Niraparib (Zejula) — PARP">
+          <option value="Lutetium-177 PSMA (Pluvicto)">
+          <option value="─── HORMONE THERAPY ───">
+          <option value="Tamoxifen — SERM">
+          <option value="Letrozole (Femara) — aromatase inhibitor">
+          <option value="Anastrozole (Arimidex) — aromatase inhibitor">
+          <option value="Exemestane (Aromasin) — aromatase inhibitor">
+          <option value="Fulvestrant (Faslodex) — SERD">
+          <option value="Elacestrant (Orserdu) — oral SERD">
+          <option value="Leuprolide (Lupron) — GnRH agonist">
+          <option value="Degarelix (Firmagon) — GnRH antagonist">
+          <option value="Relugolix (Orgovyx) — GnRH antagonist">
+          <option value="─── CELL THERAPY ───">
+          <option value="CAR-T — Axicabtagene ciloleucel (Yescarta)">
+          <option value="CAR-T — Tisagenlecleucel (Kymriah)">
+          <option value="CAR-T — Lisocabtagene maraleucel (Breyanzi)">
+          <option value="CAR-T — Idecabtagene vicleucel (Abecma)">
+          <option value="CAR-T — Ciltacabtagene autoleucel (Carvykti)">
+          <option value="Autologous stem cell transplant (ASCT)">
+          <option value="Allogeneic stem cell transplant (alloSCT)">
+          <option value="Donor lymphocyte infusion (DLI)">
+          <option value="─── INTERVENTIONAL / ABLATIVE ───">
+          <option value="Radiofrequency ablation (RFA)">
+          <option value="Microwave ablation (MWA)">
+          <option value="Cryoablation">
+          <option value="TACE (transarterial chemoembolization)">
+          <option value="TARE / Y-90 (transarterial radioembolization)">
+          <option value="IRE (irreversible electroporation / NanoKnife)">
+          <option value="HIFU (high-intensity focused ultrasound)">
+          <option value="Photodynamic therapy (PDT)">
+          <option value="Hyperthermia / thermal therapy">
+          <option value="─── TRADITIONAL / INTEGRATIVE SYSTEMS ───">
+          <option value="Traditional Chinese Medicine (TCM) — herbal formula">
+          <option value="Traditional Chinese Medicine — acupuncture">
+          <option value="Traditional Chinese Medicine — qigong">
+          <option value="Ayurveda — herbal protocol">
+          <option value="Ayurveda — panchakarma">
+          <option value="Naturopathic oncology protocol">
+          <option value="Homeopathy">
+          <option value="Anthroposophic medicine (mistletoe / Iscador)">
+          <option value="Anthroposophic medicine — Helixor">
+          <option value="Integrative oncology — IV nutrition protocol">
+          <option value="High-dose IV vitamin C (IVC)">
+          <option value="Hyperbaric oxygen therapy (HBOT)">
+          <option value="Ozone therapy">
+          <option value="Metabolic therapy — ketogenic diet">
+          <option value="Metabolic therapy — Gerson protocol">
+          <option value="Metabolic therapy — Gonzalez protocol">
+          <option value="Mind-body — meditation / mindfulness-based stress reduction (MBSR)">
+          <option value="Mind-body — yoga for cancer">
+          <option value="Energy medicine — Reiki">
+          <option value="─── EXPERIMENTAL / CLINICAL TRIAL ───">
+          <option value="Clinical trial — Phase I (dose-finding)">
+          <option value="Clinical trial — Phase II (efficacy signal)">
+          <option value="Clinical trial — Phase III (randomized)">
+          <option value="Clinical trial — expanded access / compassionate use">
+          <option value="Tumor-infiltrating lymphocyte (TIL) therapy">
+          <option value="Oncolytic virus therapy">
+          <option value="Cancer vaccine (therapeutic)">
+          <option value="Neoantigen personalized vaccine">
+          <option value="Bispecific T-cell engager (BiTE)">
+          <option value="Blinatumomab (Blincyto) — CD19/CD3 BiTE">
+          <option value="Teclistamab (Tecvayli) — BCMA/CD3 BiTE">
+          <option value="Fenbendazole — off-label / self-administered">
+          <option value="Ivermectin — off-label / self-administered">
+          <option value="Metformin — off-label adjuvant">
+          <option value="Repurposed drug — [specify]">
+          <option value="Not listed — I'll enter manually">
+        </datalist>
       </div>
       <div class="tx-field">
-        <label>Chemo / Partner</label>
-        <input type="text" id="tx-chemo" placeholder="e.g. pemetrexed + carboplatin" oninput="updateTxContext()">
+        <label>Additional Treatment(s) <span style="color:var(--muted);font-size:9px;text-transform:none">(chemo partner, radiation, concurrent therapy…)</span></label>
+        <input type="text" id="tx-chemo" placeholder="type or select — concurrent or combination" oninput="updateTxContext()" autocomplete="off">
+        <datalist id="list-chemo">
+          <option value="─── CHEMOTHERAPY ───">
+          <option value="Carboplatin">
+          <option value="Cisplatin">
+          <option value="Oxaliplatin">
+          <option value="Pemetrexed (Alimta)">
+          <option value="Paclitaxel (Taxol)">
+          <option value="Nab-paclitaxel (Abraxane)">
+          <option value="Docetaxel (Taxotere)">
+          <option value="Gemcitabine (Gemzar)">
+          <option value="Vinorelbine (Navelbine)">
+          <option value="Etoposide">
+          <option value="Irinotecan (Camptosar)">
+          <option value="Topotecan">
+          <option value="Capecitabine (Xeloda)">
+          <option value="5-Fluorouracil (5-FU)">
+          <option value="Leucovorin">
+          <option value="Cyclophosphamide (Cytoxan)">
+          <option value="Doxorubicin (Adriamycin)">
+          <option value="Liposomal doxorubicin (Doxil)">
+          <option value="Epirubicin">
+          <option value="Temozolomide (Temodar)">
+          <option value="Bleomycin">
+          <option value="Vincristine">
+          <option value="Melphalan">
+          <option value="Busulfan">
+          <option value="Methotrexate">
+          <option value="Pemetrexed + Carboplatin">
+          <option value="FOLFOX (5-FU + leucovorin + oxaliplatin)">
+          <option value="FOLFIRI (5-FU + leucovorin + irinotecan)">
+          <option value="FOLFIRINOX">
+          <option value="CHOP">
+          <option value="R-CHOP (rituximab + CHOP)">
+          <option value="BEP (bleomycin + etoposide + cisplatin)">
+          <option value="ABVD (Hodgkin lymphoma)">
+          <option value="─── RADIATION (CONCURRENT) ───">
+          <option value="Concurrent radiation — EBRT">
+          <option value="Concurrent radiation — IMRT">
+          <option value="Concurrent radiation — SBRT">
+          <option value="Concurrent radiation — proton therapy">
+          <option value="─── SUPPORTIVE / BONE ───">
+          <option value="Zoledronic acid (Zometa) — bone protection">
+          <option value="Denosumab (Xgeva) — bone protection">
+          <option value="Filgrastim (Neupogen) — G-CSF">
+          <option value="Pegfilgrastim (Neulasta) — G-CSF">
+          <option value="Erythropoietin (EPO / Procrit)">
+          <option value="None — single modality">
+          <option value="Not listed — I'll enter manually">
+        </datalist>
       </div>
       <div class="tx-field">
-        <label>Cancer Type</label>
-        <input type="text" id="tx-type" placeholder="e.g. NSCLC" oninput="updateTxContext()">
+        <label>Cancer Type / Diagnosis</label>
+        <input type="text" id="tx-type" placeholder="type or select — e.g. NSCLC" oninput="updateTxContext()" autocomplete="off">
+        <datalist id="list-cancer">
+          <option value="─── LUNG ───">
+          <option value="NSCLC — adenocarcinoma">
+          <option value="NSCLC — squamous cell carcinoma">
+          <option value="NSCLC — large cell carcinoma">
+          <option value="NSCLC — NOS (not otherwise specified)">
+          <option value="SCLC — limited stage">
+          <option value="SCLC — extensive stage">
+          <option value="Mesothelioma — pleural">
+          <option value="Mesothelioma — peritoneal">
+          <option value="─── BREAST ───">
+          <option value="Breast — HR+ HER2- (luminal A/B)">
+          <option value="Breast — HER2+ HR+">
+          <option value="Breast — HER2+ HR-">
+          <option value="Breast — Triple negative (TNBC)">
+          <option value="Breast — inflammatory">
+          <option value="Breast — male">
+          <option value="─── GI / ABDOMINAL ───">
+          <option value="Colorectal cancer — colon">
+          <option value="Colorectal cancer — rectal">
+          <option value="Colorectal cancer — MSI-H / dMMR">
+          <option value="Pancreatic ductal adenocarcinoma (PDAC)">
+          <option value="Pancreatic — neuroendocrine (PNET)">
+          <option value="Gastric / stomach cancer">
+          <option value="Gastroesophageal junction (GEJ) cancer">
+          <option value="Esophageal — adenocarcinoma">
+          <option value="Esophageal — squamous cell">
+          <option value="Liver cancer (HCC)">
+          <option value="Cholangiocarcinoma — intrahepatic">
+          <option value="Cholangiocarcinoma — extrahepatic / hilar">
+          <option value="Gallbladder cancer">
+          <option value="Small bowel / intestinal cancer">
+          <option value="Appendiceal cancer / pseudomyxoma peritonei">
+          <option value="GIST (gastrointestinal stromal tumor)">
+          <option value="Carcinoid / neuroendocrine tumor (NET)">
+          <option value="─── GENITOURINARY ───">
+          <option value="Prostate cancer — localized">
+          <option value="Prostate cancer — castration-sensitive (mCSPC)">
+          <option value="Prostate cancer — castration-resistant (mCRPC)">
+          <option value="Prostate cancer — neuroendocrine differentiation">
+          <option value="Kidney cancer — clear cell RCC">
+          <option value="Kidney cancer — non-clear cell RCC">
+          <option value="Bladder / urothelial cancer">
+          <option value="Upper tract urothelial cancer">
+          <option value="Testicular cancer — seminoma">
+          <option value="Testicular cancer — non-seminoma">
+          <option value="Penile cancer">
+          <option value="─── GYNECOLOGIC ───">
+          <option value="Ovarian cancer — high-grade serous">
+          <option value="Ovarian cancer — clear cell / endometrioid">
+          <option value="Ovarian cancer — BRCA-mutated">
+          <option value="Cervical cancer — squamous">
+          <option value="Cervical cancer — adenocarcinoma">
+          <option value="Endometrial / uterine cancer — endometrioid">
+          <option value="Endometrial cancer — serous / carcinosarcoma">
+          <option value="Endometrial cancer — MSI-H / dMMR">
+          <option value="Vulvar cancer">
+          <option value="Fallopian tube cancer">
+          <option value="Gestational trophoblastic neoplasia">
+          <option value="─── HEAD AND NECK ───">
+          <option value="Head and neck — squamous cell (HNSCC)">
+          <option value="Head and neck — HPV-positive oropharyngeal">
+          <option value="Head and neck — HPV-negative">
+          <option value="Nasopharyngeal carcinoma">
+          <option value="Salivary gland cancer">
+          <option value="Thyroid — papillary">
+          <option value="Thyroid — follicular">
+          <option value="Thyroid — medullary">
+          <option value="Thyroid — anaplastic">
+          <option value="─── BRAIN / CNS ───">
+          <option value="Glioblastoma (GBM) — IDH wild-type">
+          <option value="Astrocytoma — IDH-mutant">
+          <option value="Oligodendroglioma">
+          <option value="Brain metastases — primary from lung">
+          <option value="Brain metastases — primary from breast">
+          <option value="Brain metastases — primary from melanoma">
+          <option value="Meningioma">
+          <option value="Medulloblastoma">
+          <option value="PCNSL (primary CNS lymphoma)">
+          <option value="─── SKIN ───">
+          <option value="Melanoma — cutaneous">
+          <option value="Melanoma — uveal (ocular)">
+          <option value="Melanoma — mucosal">
+          <option value="Merkel cell carcinoma">
+          <option value="Cutaneous squamous cell carcinoma">
+          <option value="Basal cell carcinoma — advanced">
+          <option value="─── BLOOD / LYMPHOMA ───">
+          <option value="Hodgkin lymphoma — classic">
+          <option value="Hodgkin lymphoma — nodular lymphocyte-predominant (NLPHL)">
+          <option value="Diffuse large B-cell lymphoma (DLBCL)">
+          <option value="Follicular lymphoma">
+          <option value="Marginal zone lymphoma">
+          <option value="Mantle cell lymphoma">
+          <option value="T-cell lymphoma — PTCL">
+          <option value="T-cell lymphoma — cutaneous (CTCL / mycosis fungoides)">
+          <option value="Burkitt lymphoma">
+          <option value="Acute lymphoblastic leukemia (ALL)">
+          <option value="Acute myeloid leukemia (AML)">
+          <option value="Chronic myeloid leukemia (CML)">
+          <option value="Chronic lymphocytic leukemia (CLL)">
+          <option value="Hairy cell leukemia">
+          <option value="Multiple myeloma">
+          <option value="Smoldering myeloma">
+          <option value="Waldenström macroglobulinemia">
+          <option value="Myelodysplastic syndrome (MDS)">
+          <option value="Myeloproliferative neoplasm (MPN)">
+          <option value="─── SARCOMA / BONE ───">
+          <option value="Soft tissue sarcoma">
+          <option value="Osteosarcoma">
+          <option value="Ewing sarcoma">
+          <option value="Chondrosarcoma">
+          <option value="Rhabdomyosarcoma">
+          <option value="Liposarcoma">
+          <option value="Leiomyosarcoma">
+          <option value="─── OTHER / RARE ───">
+          <option value="Adrenocortical carcinoma">
+          <option value="Pheochromocytoma / paraganglioma">
+          <option value="Thymoma / thymic carcinoma">
+          <option value="Unknown primary (CUP)">
+          <option value="Not listed — I'll enter manually">
+        </datalist>
       </div>
-      <div class="tx-field">
+      <div class="tx-field" style="min-width:140px;flex:0">
         <label>Stage / Line</label>
         <select id="tx-line" onchange="updateTxContext()">
-          <option value="">—</option>
-          <option>1L</option><option>2L</option><option>3L+</option>
-          <option>adjuvant</option><option>neoadjuvant</option><option>maintenance</option>
+          <option value="">— select —</option>
+          <option>Stage I</option><option>Stage II</option>
+          <option>Stage III</option><option>Stage IV / metastatic</option>
+          <option>1L (first line)</option><option>2L (second line)</option>
+          <option>3L+ (third line or later)</option>
+          <option>Adjuvant</option><option>Neoadjuvant</option>
+          <option>Maintenance</option><option>Palliative</option>
+          <option>Surveillance / NED</option>
         </select>
       </div>
+    </div>
+
+    <div class="tx-declared" id="tx-declared-notice">
+      <strong>Declared data — not verified.</strong> You entered a treatment not on the standard list.
+      This reference cannot cross-check interactions against unlisted agents.
+      What you entered is recorded locally for your print header only — it is not transmitted, not fingerprinted, not authenticated by any system.
+      Bring it to your pharmacist or oncologist for interaction review specific to your regimen.
+    </div>
+
+    <div class="tx-summary-bar" id="tx-summary-bar">
+      <span class="ts-label">Regimen:</span>
+      <span id="tx-summary-text" style="color:var(--text)"></span>
+      <button class="tx-clear" onclick="clearTxContext()">✕ clear</button>
     </div>
   </div>
 
@@ -359,13 +755,21 @@ h1{font-size:15px;margin-bottom:2px}
     <span class="fb" style="border-color:var(--purple);color:var(--purple)" onclick="setTag('immune',this)">Immune</span>
   </div>
   <div class="action-row no-print">
-    <button class="btn accent" onclick="window.print()">🖨 Print for Doctor</button>
+    <button class="btn accent" onclick="printWithCheck()">🖨 Print for Doctor</button>
     <button class="btn" onclick="expandAll()">Expand All</button>
     <button class="btn" onclick="collapseAll()">Collapse All</button>
     <span class="count-label" id="visible-count"></span>
   </div>
 
   <div class="cards" id="cards-container"></div>
+  <div class="empty-state" id="sup-empty">
+    <strong>No substances match this search.</strong>
+    <div class="es-hint">Common misspellings are handled — try a shorter word, a synonym, or a mechanism keyword<br>(e.g. <em>CYP</em>, <em>antioxidant</em>, <em>immune</em>, <em>estrogen</em>).</div>
+    <div class="es-actions">
+      <button class="btn" onclick="clearSupSearch()">Clear search &amp; filters</button>
+      <button class="btn" onclick="showTab('notfound',document.querySelectorAll('.tab-btn')[4])">Not in corpus? →</button>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -376,6 +780,34 @@ h1{font-size:15px;margin-bottom:2px}
 <div class="container">
   <h1>Query Corpus</h1>
   <div class="doc-meta" id="corpus-load-msg">Loading study index… <span id="corpus-size"></span></div>
+
+  <!-- FULL INDEX ACCESS -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.75">
+    <strong style="color:var(--accent)">Two ways to work with this data:</strong>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <div style="flex:1;min-width:240px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px 12px">
+        <div style="font-size:10px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Option 1 — Download &amp; query locally</div>
+        <div style="color:var(--muted);font-size:11px;margin-bottom:6px">Full index: 6,358 studies, all mechanism nodes, tumor cohorts, abstracts where available. SHA-256 verified.</div>
+        <a href="https://drive.proton.me/urls/Z90MDSAQ9W#YhIrSCETc0Zt" target="_blank" style="color:var(--accent);font-size:11px;text-decoration:none;border:1px solid var(--accent);border-radius:3px;padding:3px 8px;display:inline-block">↓ Full index on Proton Drive (public, no account)</a>
+        <div style="margin-top:6px">
+        <a href="https://raw.githubusercontent.com/meridian-north/cc-cancer-corpus/master/data/cancer_index_v2_schema.csv" target="_blank" style="color:var(--accent2);font-size:10px">↓ CSV direct from GitHub</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/meridian-north/cc-cancer-corpus/blob/master/data/" target="_blank" style="color:var(--accent2);font-size:10px">Browse /data folder</a>
+        &nbsp;·&nbsp;
+        <a href="https://raw.githubusercontent.com/meridian-north/cc-cancer-corpus/master/MANIFEST_SHA256.txt" target="_blank" style="color:var(--accent2);font-size:10px">SHA-256 manifest</a>
+        </div>
+      </div>
+      <div style="flex:1;min-width:240px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px 12px">
+        <div style="font-size:10px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Option 2 — Not in the corpus? Generate a prompt</div>
+        <div style="color:var(--muted);font-size:11px;margin-bottom:6px">When the index doesn't have it, build a portable research prompt with the right guardrails pre-loaded — paste into any LLM.</div>
+        <button class="corpus-btn" onclick="showTab('notfound',document.querySelectorAll('.tab-btn')[4])" style="font-size:11px">→ Build research prompt</button>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted)">
+      Indexed presence is not efficacy. Correlation is not causation. The CSV ships with these caveats in the file header.
+      Query results export with the same caveats embedded. Abstracts and full text: follow the DOI — we do not rehost paywalled content.
+    </div>
+  </div>
 
   <div class="query-panel">
     <h3>Filters</h3>
@@ -410,10 +842,11 @@ h1{font-size:15px;margin-bottom:2px}
       <button class="corpus-btn primary" onclick="runQuery()">▶ Run Query</button>
       <button class="corpus-btn" onclick="clearQuery()">Clear</button>
       <button class="corpus-btn" onclick="showCrossroads()">⊕ Mechanism Crossroads</button>
-      <button class="corpus-btn" onclick="saveCSV()">↓ CSV</button>
-      <button class="corpus-btn" onclick="saveJSON()">↓ JSON</button>
+      <button class="corpus-btn" id="btn-csv" onclick="saveCSV()">↓ CSV</button>
+      <button class="corpus-btn" id="btn-json" onclick="saveJSON()">↓ JSON</button>
       <button class="corpus-btn" onclick="showTab('reshape',document.querySelectorAll('.tab-btn')[3])">↪ Reshape Question</button>
     </div>
+    <div class="inline-warn" id="query-warn">Run a query first — select mechanism nodes or enter a search term, then click ▶ Run Query.</div>
   </div>
 
   <div class="results-meta" id="results-meta"></div>
@@ -464,6 +897,146 @@ h1{font-size:15px;margin-bottom:2px}
   </div>
 
   <div class="outputs" id="reshape-outputs"></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 5 — NOT IN CORPUS
+═══════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-notfound">
+<div class="container">
+  <h1>Not in the Corpus?</h1>
+  <div class="doc-meta">Two paths when the index doesn't have what you need</div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;margin-bottom:16px">
+
+    <div style="background:var(--surface);border:1px solid var(--accent);border-radius:6px;padding:14px">
+      <div style="font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Path 1 — The data may exist, sweep deeper</div>
+      <p style="font-size:12px;color:var(--text);margin-bottom:8px;line-height:1.7">
+        The live query tab loads a subset. The full index (6,358 studies, all nodes, abstracts) lives on the Proton mirror. Download it, open it in Excel, Numbers, or any data tool, and search directly.
+      </p>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:10px">
+        The CSV schema includes: title · year · source_class · tumor_cohort · mechanism_nodes · agent · doi · abstract_snippet. Filter by agent name or title keyword. SHA-256 verified against the manifest.
+      </p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="https://drive.proton.me/urls/Z90MDSAQ9W#YhIrSCETc0Zt" target="_blank"
+           style="background:var(--ok-bg);border:1px solid var(--accent);color:var(--accent);padding:5px 12px;border-radius:4px;font-size:11px;text-decoration:none">↓ Full index — Proton Drive</a>
+        <a href="https://raw.githubusercontent.com/meridian-north/cc-cancer-corpus/master/data/cancer_index_v2_schema.csv" target="_blank"
+           style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 12px;border-radius:4px;font-size:11px;text-decoration:none">↓ CSV — GitHub raw</a>
+        <a href="https://raw.githubusercontent.com/meridian-north/cc-cancer-corpus/master/MANIFEST_SHA256.txt" target="_blank"
+           style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:4px;font-size:11px;text-decoration:none">SHA-256 manifest</a>
+      </div>
+      <div style="margin-top:10px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:8px">
+        If you find something that should be in the index but isn't:
+        <a href="mailto:meridian.north@pm.me" style="color:var(--accent2)">meridian.north@pm.me</a> —
+        include the DOI or PubMed ID and the mechanism node you'd assign it to.
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--accent2);border-radius:6px;padding:14px">
+      <div style="font-size:10px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Path 2 — The data doesn't exist yet. Build a safe prompt.</div>
+      <p style="font-size:12px;color:var(--text);margin-bottom:8px;line-height:1.7">
+        When no study exists, an LLM can help you reason about mechanism, identify the right questions, and find adjacent literature — if it's given the right guardrails.
+        The prompt below travels with the caveat framework built in.
+      </p>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:10px">
+        Paste it into Claude, ChatGPT, Gemini, or any capable model. The framing instructs the model: grade evidence explicitly, name gaps honestly, do not overclaim, do not dismiss lore, and flag what the patient should bring to their care team.
+      </p>
+    </div>
+  </div>
+
+  <!-- PROMPT BUILDER -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:12px">
+    <div style="font-size:11px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Build Your Research Prompt</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin-bottom:10px">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">Your question or substance</label>
+        <input type="text" id="nf-question" placeholder="e.g. D-mannose after bladder surgery, or sugar and cancer growth"
+          style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:3px;font-family:inherit;font-size:12px">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">Treatment context (auto-filled if set)</label>
+        <input type="text" id="nf-context" placeholder="e.g. NSCLC on pembrolizumab, post-surgery, surveillance…"
+          style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:3px;font-family:inherit;font-size:12px">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">What kind of answer do you need?</label>
+        <select id="nf-mode" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:3px;font-family:inherit;font-size:12px">
+          <option value="general">General — what is known and unknown</option>
+          <option value="interaction">Drug/treatment interaction — safety focus</option>
+          <option value="mechanism">Mechanism — how does this work biologically</option>
+          <option value="lifestyle">Lifestyle / supportive care — what does evidence say</option>
+          <option value="doctor">Help me ask my doctor — what to say and ask</option>
+          <option value="research">Research gaps — why hasn't this been studied</option>
+        </select>
+      </div>
+    </div>
+    <button onclick="buildNotFoundPrompt()"
+      style="background:var(--ok-bg);border:1px solid var(--accent);color:var(--accent);padding:6px 14px;border-radius:4px;font-family:inherit;font-size:12px;cursor:pointer">
+      Build prompt →
+    </button>
+  </div>
+
+  <div id="nf-output" style="display:none">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:10px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px">Generated Prompt — paste into any LLM</span>
+        <button id="nf-copy-btn" onclick="copyNotFoundPrompt()"
+          style="background:none;border:1px solid var(--border);color:var(--muted);padding:3px 10px;border-radius:3px;font-family:inherit;font-size:10px;cursor:pointer">Copy</button>
+      </div>
+      <pre id="nf-prompt-text" style="font-family:inherit;font-size:11px;white-space:pre-wrap;color:var(--text);line-height:1.7"></pre>
+    </div>
+    <div style="background:var(--warn-bg);border:1px solid var(--warn);border-radius:3px;padding:8px 12px;font-size:10px;color:var(--warn);line-height:1.6">
+      <strong>What this prompt does and doesn't do:</strong>
+      The guardrails instruct the model to grade evidence, name gaps, and not overclaim. They do not guarantee accuracy.
+      LLM responses reflect training data — which may be outdated, incomplete, or wrong.
+      Treat the response as a starting point for conversation with your care team, not as a clinical finding.
+      The caveats travel inside the prompt. You are the final filter.
+    </div>
+  </div>
+
+  <!-- QUALITY SOURCES -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-top:16px">
+    <div style="font-size:10px;color:var(--accent2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Quality Sources — When You Want to Read It Yourself</div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.6">
+      These sources maintain editorial standards we consider trustworthy for patient-facing and clinical reference. We link; we do not reproduce. They do not endorse us; we do not speak for them. Attribution is respect, not affiliation.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 12px">
+        <div style="font-size:10px;color:var(--accent);margin-bottom:4px;font-weight:700">Clinical / Academic — no hesitation</div>
+        <div style="font-size:11px;line-height:1.9">
+          <a href="https://www.cancer.gov/about-cancer/treatment/cam" target="_blank" style="color:var(--accent2)">NCI PDQ — Integrative & Complementary</a><br>
+          <a href="https://www.mskcc.org/cancer-care/diagnosis-treatment/symptom-management/integrative-medicine/herbs/search" target="_blank" style="color:var(--accent2)">MSK About Herbs database</a><br>
+          <a href="https://www.cochranelibrary.com" target="_blank" style="color:var(--accent2)">Cochrane Library (systematic reviews)</a><br>
+          <a href="https://www.nccn.org/patients" target="_blank" style="color:var(--accent2)">NCCN Patient Guidelines</a><br>
+          <a href="https://www.asco.org/practice-patients/patient-resources" target="_blank" style="color:var(--accent2)">ASCO Patient Resources</a>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 12px">
+        <div style="font-size:10px;color:var(--accent);margin-bottom:4px;font-weight:700">Patient-facing — lifestyle &amp; supportive care</div>
+        <div style="font-size:11px;line-height:1.9">
+          <a href="https://www.cancer.org/cancer/survivorship/long-term-health-concerns/nutrition.html" target="_blank" style="color:var(--accent2)">American Cancer Society — Nutrition</a><br>
+          <a href="https://www.cancer.org/cancer/survivorship/long-term-health-concerns/physical-activity.html" target="_blank" style="color:var(--accent2)">ACS — Physical Activity During Treatment</a><br>
+          <a href="https://www.cancerresearchuk.org/about-cancer/cancer-in-general/treatment/complementary-alternative-therapies" target="_blank" style="color:var(--accent2)">Cancer Research UK — Complementary Therapies</a><br>
+          <a href="https://www.macmillan.org.uk/cancer-information-and-support/impacts-of-cancer/diet-and-cancer" target="_blank" style="color:var(--accent2)">Macmillan Cancer Support — Diet</a>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 12px">
+        <div style="font-size:10px;color:var(--accent);margin-bottom:4px;font-weight:700">Drug &amp; interaction reference</div>
+        <div style="font-size:11px;line-height:1.9">
+          <a href="https://www.drugs.com/drug_interactions.html" target="_blank" style="color:var(--accent2)">Drugs.com — Interaction Checker</a><br>
+          <a href="https://naturalmedicines.therapeuticresearch.com" target="_blank" style="color:var(--accent2)">Natural Medicines (subscription — ask your pharmacist)</a><br>
+          <a href="https://www.webmd.com/interaction-checker/default.htm" target="_blank" style="color:var(--accent2)">WebMD — Interaction Checker</a><br>
+          <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" style="color:var(--accent2)">PubMed (primary literature)</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.6">
+      We are inspired by these sources. We do not receive funding from them. We do not imply their endorsement.
+      Where their guidance and our indexed evidence agree, that agreement is noted. Where they differ, we say so.
+      Natural Medicines database is subscription — your hospital pharmacist or oncology team likely has access; ask them to run your supplement list.
+    </div>
+  </div>
 </div>
 </div>
 
@@ -1131,13 +1704,50 @@ function updateTxContext(){
     type:document.getElementById('tx-type').value,
     line:document.getElementById('tx-line').value
   };
+
+  // Detect manually-entered (not-on-list) values
+  const notListed='not listed';
+  const isCustom=[txState.agent,txState.chemo,txState.type].some(v=>
+    v&&v.toLowerCase().includes(notListed));
+  const hasCustomValue=[txState.agent,txState.chemo,txState.type].some(v=>{
+    if(!v)return false;
+    // Check if value matches any datalist option
+    const agentOpts=Array.from(document.querySelectorAll('#list-agents option')).map(o=>o.value.toLowerCase());
+    const chemoOpts=Array.from(document.querySelectorAll('#list-chemo option')).map(o=>o.value.toLowerCase());
+    const cancerOpts=Array.from(document.querySelectorAll('#list-cancer option')).map(o=>o.value.toLowerCase());
+    const allOpts=[...agentOpts,...chemoOpts,...cancerOpts];
+    return !allOpts.includes(v.toLowerCase())&&v.length>2;
+  });
+
+  const notice=document.getElementById('tx-declared-notice');
+  if(isCustom||hasCustomValue){notice.classList.add('show');}
+  else{notice.classList.remove('show');}
+
   const parts=[];
   if(txState.type)parts.push(txState.type);
   if(txState.agent)parts.push(txState.agent);
   if(txState.chemo)parts.push(txState.chemo);
   if(txState.line)parts.push(txState.line);
-  const summary=parts.length?parts.join(' · '):'not specified';
-  document.getElementById('print-tx-summary').textContent='Treatment context: '+summary;
+  const summary=parts.length?parts.join(' · '):'';
+
+  const bar=document.getElementById('tx-summary-bar');
+  const txt=document.getElementById('tx-summary-text');
+  if(summary){bar.classList.add('show');txt.textContent=summary;}
+  else{bar.classList.remove('show');}
+
+  document.getElementById('print-tx-summary').textContent=
+    'Regimen: '+(summary||'not specified');
+}
+
+function clearTxContext(){
+  document.getElementById('tx-agent').value='';
+  document.getElementById('tx-chemo').value='';
+  document.getElementById('tx-type').value='';
+  document.getElementById('tx-line').value='';
+  txState={agent:'',chemo:'',type:'',line:''};
+  document.getElementById('tx-declared-notice').classList.remove('show');
+  document.getElementById('tx-summary-bar').classList.remove('show');
+  document.getElementById('print-tx-summary').textContent='Regimen: not specified';
 }
 
 // ═══════════════════════════════════════════════════
@@ -1232,6 +1842,29 @@ function collapseAll(){DB.forEach(d=>{const el=document.getElementById('card-'+d
 function updateVisibleCount(){
   const total=document.querySelectorAll('.card:not(.hidden)').length;
   document.getElementById('visible-count').textContent=`${total} of ${DB.length} shown`;
+  const empty=document.getElementById('sup-empty');
+  if(empty) empty.classList.toggle('show',total===0);
+}
+
+function clearSupSearch(){
+  document.getElementById('sup-search').value='';
+  activeFlag='all';activeTag=null;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.fb.all').classList.add('active');
+  filterSupplements();
+}
+
+function printWithCheck(){
+  const hasContext=txState.agent||txState.type||txState.chemo;
+  if(!hasContext){
+    const bar=document.getElementById('tx-summary-bar');
+    // Brief highlight of the treatment context section
+    const ctx=document.querySelector('.tx-context');
+    if(ctx){
+      ctx.style.outline='2px solid var(--warn)';
+      setTimeout(()=>{ctx.style.outline='';window.print();},800);
+    } else { window.print(); }
+  } else { window.print(); }
 }
 
 // ═══════════════════════════════════════════════════
@@ -1391,6 +2024,18 @@ function runQuery(){
   renderResults();
 }
 
+function resetQuery(){clearQuery();document.getElementById('q-text').value='';document.getElementById('q-cohort').value='';}
+
+function flashNeedQuery(){
+  const warn=document.getElementById('query-warn');
+  if(!warn)return;
+  warn.classList.add('show');
+  ['btn-csv','btn-json'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b){b.classList.remove('btn-flash');void b.offsetWidth;b.classList.add('btn-flash');}
+  });
+  setTimeout(()=>warn.classList.remove('show'),3500);
+}
 function clearQuery(){
   document.getElementById('q-cohort').value='';
   document.getElementById('q-evidence').value='';
@@ -1409,7 +2054,20 @@ function renderResults(){
   const container=document.getElementById('results-container');
   const pager=document.getElementById('pager');
 
-  if(!currentResults.length){meta.textContent='No results.';container.innerHTML='';pager.style.display='none';return;}
+  if(!currentResults.length){
+    meta.textContent='';
+    pager.style.display='none';
+    container.innerHTML=`<div class="empty-state show" style="text-align:left;padding:16px 18px">
+      <strong>No studies match these filters.</strong>
+      <div class="es-hint">Try: removing a mechanism node, clearing the cohort filter, or using a shorter keyword — the index is sparse on some subtypes.</div>
+      <div class="es-actions" style="justify-content:flex-start;margin-top:10px">
+        <button class="btn" onclick="resetQuery()">Clear all filters</button>
+        <a class="btn" href="https://drive.proton.me/urls/Z90MDSAQ9W#YhIrSCETc0Zt" target="_blank" rel="noopener">Full CSV (6,358 studies) ↗</a>
+        <button class="btn" onclick="showTab('notfound',document.querySelectorAll('.tab-btn')[4])">Generate LLM prompt →</button>
+      </div>
+    </div>`;
+    return;
+  }
 
   const total=currentResults.length;
   const pages=Math.ceil(total/PAGE_SIZE);
@@ -1457,7 +2115,17 @@ function openCorpusQuery(grep){
 // ═══════════════════════════════════════════════════
 function showCrossroads(){
   showTab('crossroads',document.querySelectorAll('.tab-btn')[2]);
-  if(!corpusLoaded){document.getElementById('crossroads-container').innerHTML='<div class="load-status">Load corpus first (Query tab).</div>';return;}
+  if(!corpusLoaded){
+    document.getElementById('crossroads-container').innerHTML=`<div class="empty-state show" style="text-align:left">
+      <strong>Corpus not loaded yet.</strong>
+      <div class="es-hint">The mechanism crossroads map needs the study index. It loads in a few seconds.</div>
+      <div class="es-actions" style="justify-content:flex-start">
+        <button class="btn accent" onclick="loadCorpus().then(()=>showCrossroads())">Load corpus &amp; show crossroads</button>
+        <button class="btn" onclick="showTab('corpus',document.querySelectorAll('.tab-btn')[1]);loadCorpus()">Go to Query tab →</button>
+      </div>
+    </div>`;
+    return;
+  }
   const pairs={};
   corpus.forEach(s=>{
     const nodes=s.mechanism_nodes||[];
@@ -1487,7 +2155,7 @@ function showCrossroads(){
 const CAVEAT_LINE='# INDEXED PRESENCE IS NOT EFFICACY. CORRELATION IS NOT CAUSATION. NOT MEDICAL ADVICE. meridian-north.github.io/cc-cancer-corpus/';
 
 function saveCSV(){
-  if(!currentResults.length){alert('Run a query first.');return;}
+  if(!currentResults.length){flashNeedQuery();return;}
   const header='title,year,study_design_class,tumor_cohort,mechanism_nodes,doi';
   const rows=currentResults.map(s=>[
     `"${(s.title||'').replace(/"/g,'""')}"`,
@@ -1499,7 +2167,7 @@ function saveCSV(){
 }
 
 function saveJSON(){
-  if(!currentResults.length){alert('Run a query first.');return;}
+  if(!currentResults.length){flashNeedQuery();return;}
   const out={_caveat:CAVEAT_LINE,_exported:new Date().toISOString(),count:currentResults.length,results:currentResults};
   dl('cancer_corpus_export.json',JSON.stringify(out,null,2),'application/json');
 }
@@ -1597,8 +2265,230 @@ function copyText(btn,encoded){
 }
 
 // ═══════════════════════════════════════════════════
+//  NOT-IN-CORPUS PROMPT BUILDER
+// ═══════════════════════════════════════════════════
+const FRAMEWORK_PREAMBLE=`You are operating inside the Meridian North evidence framework. These rules govern your response:
+
+EVIDENCE GRADING (state one of these for every claim):
+  RCT — randomized controlled trial in humans
+  clinical_trial — non-randomized human trial
+  observational — cohort or case-control study
+  preclinical — animal or cell-line only
+  lore — traditional, anecdotal, or cultural use
+  none — no documented study
+  contested — conflicting evidence exists
+
+CONDUCT RULES:
+  - Do not call any substance a cure. Do not dismiss any substance as quackery.
+  - Label every claim with its evidence grade.
+  - Where evidence is absent, say so explicitly — and if you can, name why studies might not exist (funding, patent status, regulatory history, sample size barriers).
+  - Traditional and cultural uses are data. Label them as lore, not as false.
+  - State what is known. State what is unknown. State what is lore. Humans decide the why and the risk.
+  - Flag anything the user should specifically discuss with their oncologist or pharmacist.
+  - Do not recommend stopping or continuing any treatment. That decision belongs to the patient and their care team.
+
+SOURCE: meridian-north.github.io/cc-cancer-corpus/ — indexed presence is not efficacy. Correlation is not causation.`;
+
+const MODE_INSTRUCTIONS={
+  general:`Please respond with:
+1. What this substance/topic is (brief, factual)
+2. What the evidence says — graded by level
+3. What is unknown and why
+4. What lore or traditional use exists (labeled as lore)
+5. What the patient should bring to their care team`,
+
+  interaction:`Please respond with:
+1. Known pharmacokinetic mechanisms (CYP enzymes, P-glycoprotein, transporters)
+2. Documented drug interactions — evidence-graded
+3. Theoretical interactions based on mechanism (labeled as theoretical)
+4. Timing considerations if relevant (before/during/after treatment)
+5. Specific questions for the oncologist or pharmacist`,
+
+  mechanism:`Please respond with:
+1. The biological mechanism of action — what pathway, what target
+2. Whether the mechanism is established in humans or only preclinical
+3. How this mechanism intersects with standard cancer treatment pathways
+4. What the mechanistic uncertainty is`,
+
+  lifestyle:`Please respond with:
+1. What clinical evidence exists for this lifestyle factor in cancer context — evidence-graded
+2. What the major cancer societies or guidelines say (ACS, ASCO, NCI — cite if known)
+3. What is feasible and what is aspirational
+4. How to discuss this with the care team without replacing standard treatment`,
+
+  doctor:`Please respond with a script the patient can use:
+1. How to introduce the topic without triggering dismissal
+2. The specific questions to ask (interaction? timing? dose? evidence?)
+3. What information to bring to the appointment
+4. What to ask the pharmacist specifically`,
+
+  research:`Please respond with:
+1. What research exists — evidence-graded
+2. What research does NOT exist — name the specific gaps
+3. Why those gaps likely exist (funding, patents, regulatory, feasibility)
+4. Whether any trials are currently registered (ClinicalTrials.gov)
+5. What it would take to fill the gap`
+};
+
+function buildNotFoundPrompt(){
+  const q=document.getElementById('nf-question').value.trim();
+  if(!q){
+    const field=document.getElementById('nf-question');
+    field.style.outline='2px solid var(--danger)';field.style.borderColor='var(--danger)';
+    field.focus();
+    setTimeout(()=>{field.style.outline='';field.style.borderColor='';},2000);
+    return;
+  }
+
+  // Auto-fill context from tx state if set
+  const ctxField=document.getElementById('nf-context');
+  if(!ctxField.value&&(txState.agent||txState.type||txState.chemo)){
+    ctxField.value=[txState.type,txState.agent,txState.chemo,txState.line].filter(Boolean).join(', ');
+  }
+  const ctx=ctxField.value.trim();
+  const mode=document.getElementById('nf-mode').value;
+
+  const prompt=`${FRAMEWORK_PREAMBLE}
+
+PATIENT CONTEXT: ${ctx||'Not specified — answer in general cancer treatment context'}
+
+QUESTION: ${q}
+
+${MODE_INSTRUCTIONS[mode]||MODE_INSTRUCTIONS.general}
+
+Respond in plain language the patient can understand and bring to their appointment.
+If any part of your response is uncertain, say so. If a claim is your inference rather than documented fact, label it as such.
+End with: "What to bring to your care team:" — a bulleted list of 2–4 specific questions or items.`;
+
+  document.getElementById('nf-prompt-text').textContent=prompt;
+  document.getElementById('nf-output').style.display='block';
+  document.getElementById('nf-output').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyNotFoundPrompt(){
+  const text=document.getElementById('nf-prompt-text').textContent;
+  const btn=document.getElementById('nf-copy-btn');
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✓ Copied';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent='✓ Copied';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+// Wire up tab 5 button to also pre-fill context
+document.querySelectorAll('.tab-btn')[4].addEventListener('click',()=>{
+  const ctxField=document.getElementById('nf-context');
+  if(!ctxField.value&&(txState.agent||txState.type)){
+    ctxField.value=[txState.type,txState.agent,txState.chemo,txState.line].filter(Boolean).join(', ');
+  }
+});
+
+// ═══════════════════════════════════════════════════
+//  CUSTOM AUTOCOMPLETE (replaces native datalist)
+// ═══════════════════════════════════════════════════
+function initMeridianSelect(inputId, datalistId){
+  const input=document.getElementById(inputId);
+  const dl=document.getElementById(datalistId);
+  if(!input||!dl) return;
+
+  // Build option list from datalist
+  const rawOpts=Array.from(dl.options).map(o=>o.value).filter(Boolean);
+
+  // Wrap input in .ms-wrap and append dropdown div
+  const wrap=input.parentElement;
+  wrap.classList.add('ms-wrap');
+  const dd=document.createElement('div');
+  dd.className='ms-dropdown';
+  wrap.appendChild(dd);
+
+  function renderOpts(filter){
+    dd.innerHTML='';
+    const q=(filter||'').toLowerCase().trim();
+    rawOpts.forEach(val=>{
+      // Detect section headers (─── FOO ───)
+      if(val.startsWith('─')||val.toLowerCase().includes('───')){
+        const el=document.createElement('div');
+        el.className='ms-opt ms-header';
+        el.textContent=val.replace(/─+/g,'').trim();
+        dd.appendChild(el);
+        return;
+      }
+      if(q&&!val.toLowerCase().includes(q)) return;
+      const el=document.createElement('div');
+      el.className='ms-opt';
+      el.textContent=val;
+      el.addEventListener('mousedown',e=>{
+        e.preventDefault();
+        input.value=val;
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+        dd.classList.remove('open');
+      });
+      dd.appendChild(el);
+    });
+    // Remove trailing orphan headers
+    const children=Array.from(dd.children);
+    for(let i=children.length-1;i>=0;i--){
+      if(children[i].classList.contains('ms-header')) children[i].remove();
+      else break;
+    }
+    // No-match hint
+    const realItems=dd.querySelectorAll('.ms-opt:not(.ms-header)');
+    if(q&&realItems.length===0){
+      const hint=document.createElement('div');
+      hint.className='ms-no-match';
+      hint.textContent='No match — type to enter manually or clear to browse all';
+      dd.appendChild(hint);
+    }
+  }
+
+  function openDd(){
+    renderOpts(input.value);
+    if(dd.children.length>0) dd.classList.add('open');
+  }
+
+  input.addEventListener('focus',openDd);
+  input.addEventListener('input',()=>{
+    renderOpts(input.value);
+    if(dd.children.length>0) dd.classList.add('open');
+    else dd.classList.remove('open');
+  });
+  input.addEventListener('blur',()=>setTimeout(()=>dd.classList.remove('open'),180));
+  input.addEventListener('keydown',e=>{
+    const items=[...dd.querySelectorAll('.ms-opt:not(.ms-header)')];
+    const fi=items.findIndex(el=>el.classList.contains('focused'));
+    if(e.key==='Escape'){dd.classList.remove('open');return;}
+    if(e.key==='ArrowDown'){
+      e.preventDefault();
+      if(fi>=0) items[fi].classList.remove('focused');
+      const next=items[fi+1]||items[0];
+      if(next){next.classList.add('focused');next.scrollIntoView({block:'nearest'});}
+    }
+    if(e.key==='ArrowUp'){
+      e.preventDefault();
+      if(fi>=0) items[fi].classList.remove('focused');
+      const prev=items[fi-1]||items[items.length-1];
+      if(prev){prev.classList.add('focused');prev.scrollIntoView({block:'nearest'});}
+    }
+    if(e.key==='Enter'&&fi>=0){
+      input.value=items[fi].textContent;
+      input.dispatchEvent(new Event('input',{bubbles:true}));
+      dd.classList.remove('open');
+      e.preventDefault();
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════
+initMeridianSelect('tx-agent','list-agents');
+initMeridianSelect('tx-chemo','list-chemo');
+initMeridianSelect('tx-type','list-cancer');
 renderCards();
 </script>
 </body>
