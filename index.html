@@ -47,6 +47,11 @@
   .tag.v{background:var(--accent-soft);color:var(--accent-ink)} .tag.q{background:var(--qbg);color:var(--q)} .tag.flag{background:var(--flagbg);color:var(--flag);font-weight:600}
   .tag.pivot{cursor:pointer;transition:background .1s} .tag.pivot:hover{background:#cfe0d9;color:#13554c}
   .clearpivot{border:1px solid var(--line);background:#fff;border-radius:7px;padding:3px 10px;cursor:pointer;font-size:12px;margin-left:auto;white-space:nowrap}
+  #rinput{width:100%;min-height:130px;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;resize:vertical;line-height:1.45}
+  .rprivacy{background:var(--accent-soft);color:var(--accent-ink);border-radius:8px;padding:9px 12px;font-size:12.5px;margin-bottom:13px}
+  .rrow{border:1px solid var(--line);border-radius:9px;padding:10px 13px;margin-bottom:8px}
+  .rrow.miss{background:#fbfcfd} .rrow .rn{font-weight:600;font-size:14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center} .rmiss{color:var(--muted)}
+  .rsum{margin:14px 0 8px;font-size:13px;color:var(--muted)}
   .empty{color:var(--muted);padding:40px;text-align:center}
   .modal{position:fixed;inset:0;background:rgba(20,30,40,.42);display:none;align-items:center;justify-content:center;z-index:20}
   .modal.open{display:flex}
@@ -69,6 +74,7 @@
     <button class="btn" id="viewToggle" aria-pressed="false">▦ Table</button>
     <button class="btn" id="composeToggle" aria-pressed="false">⇄ All three</button>
     <button class="btn flag" id="retToggle" aria-pressed="false">⚑ Retraction overlay</button>
+    <button class="btn" id="regimenBtn" style="border-color:var(--accent);color:var(--accent-ink)">⊕ Match my regimen</button>
   </div>
 </div></header>
 <div class="wrap"><main>
@@ -77,6 +83,15 @@
 </main></div>
 <footer class="wrap">Cancer Corpus · MerkleTrust / Garrison Node · evidence you can re-derive yourself · prototype, not a final.</footer>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="modal" id="rmodal"><div class="sheet">
+  <button class="x" onclick="closeRegimen()">×</button>
+  <h2>Match your regimen</h2>
+  <div class="rprivacy">🔒 This runs entirely in your browser. Your list is never uploaded, saved, or sent anywhere — it never leaves your device.</div>
+  <textarea id="rinput" placeholder="Paste your supplements and herbs — one per line, or comma-separated.&#10;&#10;e.g.&#10;Curcumin&#10;Vitamin D&#10;Milk thistle&#10;Melatonin"></textarea>
+  <button class="btn" id="rmatch" style="margin-top:10px;border-color:var(--accent);color:var(--accent-ink)">Match against the corpus</button>
+  <div id="rresults"></div>
+  <p style="margin-top:16px;font-size:12px;color:var(--muted)">A reference tool, not medical advice. It shows what's verifiable and what's an open question — never a recommendation. A match is not an endorsement; "not in our corpus" is a gap, not a verdict. Talk to your care team.</p>
+</div></div>
 <script>
 const MT=window.MT_DATA||{}; const D=k=>MT[k]||[];
 const RET={}; (MT.retraction||[]).forEach(r=>{if(r.doi)RET[r.doi.toLowerCase()]=r;});
@@ -122,6 +137,18 @@ $("#q").addEventListener("input",render);
 $("#viewToggle").onclick=function(){TABLE=!TABLE;this.setAttribute("aria-pressed",TABLE);this.textContent=TABLE?"▤ Cards":"▦ Table";render();};
 $("#composeToggle").onclick=function(){COMPOSE=!COMPOSE;this.setAttribute("aria-pressed",COMPOSE);if(!COMPOSE)CUR=[CUR[0]];renderPick();render();};
 $("#retToggle").onclick=function(){RET_ON=!RET_ON;this.setAttribute("aria-pressed",RET_ON);if(RET_ON)CUR=[CORPORA[0]];renderPick();render();};
+/* ---- Paste-your-regimen matcher (100% client-side; the pasted list never leaves the browser) ---- */
+let RIDX=null;
+function _rnorm(s){return String(s||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\b(mg|mcg|iu|g|ml|daily|capsules?|tablets?|softgels?|extract|powder|drops?)\b/g," ").replace(/\s+/g," ").trim();}
+function buildRIdx(){RIDX={};const add=(key,rec,kind)=>{String(key||"").split(/[\/;,|]/).forEach(part=>{const k=_rnorm(part);if(k&&k.length>1&&!RIDX[k])RIDX[k]={rec,kind};});};(D("cancer_sub")||[]).forEach(r=>{add(r.substance,r,"substance");add(r.common_name,r,"substance");add(r.alt_names,r,"substance");});(D("herbal")||[]).forEach(r=>{add(r.substance,r,"herbal");add(r.common_name,r,"herbal");add(r.alt_names,r,"herbal");});}
+function matchItem(raw){const n=_rnorm(raw);if(!n)return null;if(RIDX[n])return Object.assign({how:"exact"},RIDX[n]);let best=null;for(const k in RIDX){if((k===n||k.startsWith(n)||n.startsWith(k)||(" "+k+" ").includes(" "+n+" ")||(" "+n+" ").includes(" "+k+" "))&&Math.min(k.length,n.length)>3){const d=Math.abs(k.length-n.length);if(!best||d<best._d)best=Object.assign({how:"close",_d:d},RIDX[k]);}}return best;}
+function retractedFor(raw){const n=_rnorm(raw);if(n.length<4)return null;return (MT.retraction||[]).find(x=>_rnorm(x.title).includes(n))||null;}
+function openRegimen(){if(!RIDX)buildRIdx();document.getElementById("rmodal").classList.add("open");setTimeout(()=>$("#rinput").focus(),50);}
+function closeRegimen(){document.getElementById("rmodal").classList.remove("open");}
+function matchRegimen(){const items=($("#rinput").value||"").split(/[\n,;]+/).map(s=>s.trim()).filter(s=>s.length>1);const out=$("#rresults");if(!items.length){out.innerHTML='<div class="rsum">Paste a list above, then Match.</div>';return;}let found=0;const rows=items.map(it=>{const m=matchItem(it);const ret=retractedFor(it);if(m){found++;const r=m.rec,herb=m.kind==="herbal";const close=m.how==="close"?` <span class="tag">≈ ${r.substance||r.common_name}</span>`:"";const detail=herb?`regulated as medicine: ${r.region||""} ${r.framework?("("+r.framework+")"):""} — ${r.indication_or_role||r.oncology_relevance||""}`:[r.type,r.evidence_floor?("evidence: "+r.evidence_floor):"",r.candidate?("candidate: "+r.candidate):"",r.mechanism].filter(Boolean).join(" · ");return `<div class="rrow"><div class="rn">${it} <span class="tag v">✓ in corpus</span>${close}${ret?`<span class="tag flag">⚑ a study on this was retracted</span>`:""}</div><div style="font-size:12.5px;color:var(--muted);margin-top:5px">${detail||"—"}</div></div>`;}return `<div class="rrow miss"><div class="rn rmiss">${it} <span class="tag">○ not in our corpus — a gap, not a verdict</span></div></div>`;}).join("");out.innerHTML=`<div class="rsum"><b>${found}</b> of ${items.length} matched · ${items.length-found} not found (gaps worth asking about)</div>`+rows;}
+$("#regimenBtn").onclick=openRegimen;
+$("#rmatch").onclick=matchRegimen;
+document.getElementById("rmodal").onclick=e=>{if(e.target.id==="rmodal")closeRegimen();};
 renderPick();render();
 </script>
 </body>
