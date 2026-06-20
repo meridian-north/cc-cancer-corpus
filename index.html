@@ -1,17 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=generic_supplement_review.html">
-<title>What Nobody Will Talk About — Supplements &amp; Cancer Treatment</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cancer Corpus — verifiable evidence, honest questions</title>
+<script src="cancer_data.js"></script>
 <style>
-  body{background:#0f1117;color:#8b90a8;font-family:'SF Mono','Fira Code',monospace;
-    display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-size:13px}
-  a{color:#60a5fa}
+  :root{
+    --bg:#f6f8fa; --panel:#fff; --ink:#1c2530; --muted:#5a6b7b; --line:#e3e9ef;
+    --accent:#1f7a6d; --accent-soft:#e4f2ef; --accent-ink:#13554c;
+    --chip:#eef2f6; --warn-bg:#fff7ed; --warn-ink:#9a5b1a; --warn-line:#f3d9b8;
+    --info-bg:#eef4fb; --q:#a23b4e; --qbg:#fdeef0; --flag:#b4232f; --flagbg:#fdecec;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  header{background:var(--panel);border-bottom:1px solid var(--line);padding:18px 0}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  h1{margin:0;font-size:20px;font-weight:650;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:13.5px;margin-top:3px}
+  .pickrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+  .corpus{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:7px 13px;border-radius:999px;font-size:13.5px;cursor:pointer;display:flex;gap:7px;align-items:center}
+  .corpus[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .corpus .st{font-size:10.5px;opacity:.65}
+  .toolbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .toolbar input.search{flex:1;min-width:220px;border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:15px}
+  .btn{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:9px 12px;font-size:13px;cursor:pointer}
+  .btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.flag[aria-pressed="true"]{background:var(--flag);border-color:var(--flag)}
+  main{display:grid;grid-template-columns:240px 1fr;gap:22px;padding:20px 0 70px}
+  .side{position:sticky;top:16px;align-self:start}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:13px}
+  .panel h3{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .facet label{display:flex;align-items:center;gap:8px;font-size:13px;padding:3px 0;cursor:pointer}
+  .facet .ct{margin-left:auto;color:var(--muted);font-size:12px}
+  .count{color:var(--muted);font-size:13px;margin:0 2px 12px}
+  .banner{border-radius:10px;padding:10px 13px;font-size:12.5px;margin-bottom:10px}
+  .disc{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink)}
+  .help{background:var(--info-bg);border:1px solid #d2e0f0;color:#2a4d76}
+  table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:10px 13px;font-size:13px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#fbfcfd;cursor:pointer;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+  tr:last-child td{border-bottom:none} tbody tr{cursor:pointer} tbody tr:hover{background:#f9fbfc}
+  .cardwrap .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer}
+  .card .t{font-weight:600;font-size:15px;margin:0 0 6px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px} .tag{background:var(--chip);border-radius:6px;padding:2px 9px;font-size:12px;color:#41506a}
+  .tag.v{background:var(--accent-soft);color:var(--accent-ink)} .tag.q{background:var(--qbg);color:var(--q)} .tag.flag{background:var(--flagbg);color:var(--flag);font-weight:600}
+  .empty{color:var(--muted);padding:40px;text-align:center}
+  .modal{position:fixed;inset:0;background:rgba(20,30,40,.42);display:none;align-items:center;justify-content:center;z-index:20}
+  .modal.open{display:flex}
+  .sheet{background:var(--panel);border-radius:14px;max-width:640px;width:92%;max-height:84vh;overflow:auto;padding:22px 24px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .sheet h2{margin:0 0 4px;font-size:17px} .sheet .cl{color:var(--muted);font-size:12.5px;margin-bottom:14px}
+  .kv{display:grid;grid-template-columns:160px 1fr;gap:6px 14px;font-size:13px} .kv .k{color:var(--muted)} .kv .val{word-break:break-word}
+  .sheet .x{float:right;cursor:pointer;color:var(--muted);font-size:20px;border:none;background:none}
+  .retbox{background:var(--flagbg);border:1px solid #f3cfcf;border-radius:9px;padding:10px 12px;margin-top:14px;font-size:12.5px;color:#7a1f28}
+  .card a,.sheet a{color:var(--accent);text-decoration:none;font-size:13px;font-weight:500} a:hover{text-decoration:underline}
+  footer{border-top:1px solid var(--line);color:var(--muted);font-size:12px;padding:16px 0;text-align:center}
 </style>
 </head>
 <body>
-<p>Loading… <a href="generic_supplement_review.html">click here if not redirected</a></p>
-<script>window.location.replace('generic_supplement_review.html');</script>
+<header><div class="wrap">
+  <h1>Cancer Corpus — what's verifiable, and what's a question</h1>
+  <div class="sub">A reference tool, not medical advice. Conventional + complementary evidence, every identifier verified, mechanisms surfaced, retractions flagged. It does not recommend treatment — it shows you the ground.</div>
+  <div class="pickrow" id="pickrow"></div>
+  <div class="toolbar">
+    <input class="search" id="q" placeholder="Search…" autocomplete="off">
+    <button class="btn" id="viewToggle" aria-pressed="false">▦ Table</button>
+    <button class="btn" id="composeToggle" aria-pressed="false">⇄ All three</button>
+    <button class="btn flag" id="retToggle" aria-pressed="false">⚑ Retraction overlay</button>
+  </div>
+</div></header>
+<div class="wrap"><main>
+  <aside class="side" id="side"></aside>
+  <section><div class="count" id="count"></div><div id="banners"></div><div id="results"></div></section>
+</main></div>
+<footer class="wrap">Cancer Corpus · MerkleTrust / Garrison Node · evidence you can re-derive yourself · prototype, not a final.</footer>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<script>
+const MT=window.MT_DATA||{}; const D=k=>MT[k]||[];
+const RET={}; (MT.retraction||[]).forEach(r=>{if(r.doi)RET[r.doi.toLowerCase()]=r;});
+const CORPORA=[
+ { id:"cancer", key:"cancer", label:"Literature", status:(D("cancer").length||"")+" refs",
+   title:"title", link:"link", doiField:"identifier", sort:["year","journal","source_class"],
+   facets:["source_class","year","verified"], search:["title","journal","mechanism_nodes","cohorts"], verdict:null,
+   display:["title","journal","year","source_class","verified","mechanism_nodes","cohorts"],
+   caveat:"A reference tool, not medical advice. Identifiers verified, evidence classified, mechanism patterns surfaced. No treatment recommendation — talk to your care team.",
+   help:"Search titles, journals, mechanisms, cohorts. Click a row for full provenance. Turn on ⚑ Retraction overlay to see which cited papers were later retracted." },
+ { id:"cancer_sub", key:"cancer_sub", label:"Substances (AC360 + Duke)", status:(D("cancer_sub").length||"")+" agents",
+   title:"substance", link:null, sort:["candidate","evidence_floor","source"], facets:["source","type","candidate"],
+   search:["substance","common_name","alt_names","mechanism"], verdict:"candidate",
+   display:["substance","common_name","type","mechanism","source","evidence_floor","candidate"],
+   caveat:"Candidate substances from public phytochemical/literature sweeps. 'Candidate' means evidence exists to ASK a question — not that anything is recommended or proven." },
+ { id:"herbal", key:"herbal", label:"Herbal — regulated (DE·JP·CA)", status:(D("herbal").length||"")+" (seed)",
+   title:"substance", link:null, sort:["region","framework"], facets:["region","framework","status"],
+   search:["substance","indication_or_role","oncology_relevance"], verdict:null,
+   display:["substance","region","framework","status","indication_or_role","oncology_relevance","source"],
+   caveat:"Three governments regulate these as medicine; this indexes that public regulatory FACT with a source pointer, never an efficacy claim. Seed rows — confirm against the cited primary monograph." }
+];
+let CUR=[CORPORA[0]], COMPOSE=false, TABLE=false, RET_ON=false, SEL={}, SORT={col:null,dir:1};
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+function rows(c){return D(c.key).map(r=>({...r,__corpus:c.label,__cfg:c}));}
+function allRows(){return CUR.flatMap(rows);}
+function retOf(r){const c=r.__cfg;if(!c.doiField)return null;return RET[(r[c.doiField]||"").toLowerCase()]||null;}
+function pick(c){if(COMPOSE){CUR.some(x=>x.id===c.id)?CUR=CUR.filter(x=>x.id!==c.id):CUR.push(c);if(!CUR.length)CUR=[c];}else CUR=[c];SEL={};SORT={col:null,dir:1};$("#q").value="";renderPick();render();}
+function renderPick(){const r=$("#pickrow");r.innerHTML="";CORPORA.forEach(c=>{const on=CUR.some(x=>x.id===c.id);const b=document.createElement("button");b.className="corpus";b.setAttribute("aria-pressed",on);b.innerHTML=`${c.label} <span class="st">${c.status}</span>`;b.onclick=()=>pick(c);r.appendChild(b);});}
+function renderSide(){const s=$("#side");s.innerHTML="";const c=CUR[0];if((c.facets||[]).length){const fp=document.createElement("div");fp.className="panel facet";fp.innerHTML="<h3>filters</h3>";c.facets.forEach(col=>{const counts={};allRows().forEach(r=>{const v=(r[col]??"").toString().trim()||"—";counts[v]=(counts[v]||0)+1;});fp.insertAdjacentHTML("beforeend",`<div style="font-size:11px;color:var(--muted);margin:6px 0 2px;text-transform:uppercase;letter-spacing:.05em">${col.replace(/_/g," ")}</div>`);Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,7).forEach(([v,n])=>{const id=col+"::"+v;const l=document.createElement("label");l.innerHTML=`<input type="checkbox" ${SEL[id]?"checked":""}><span>${v}</span><span class="ct">${n}</span>`;l.querySelector("input").onchange=e=>{SEL[id]=e.target.checked;render();};fp.appendChild(l);});});s.appendChild(fp);}}
+function matches(r){const cfg=r.__cfg,q=$("#q").value.trim().toLowerCase();if(RET_ON&&cfg.doiField&&!retOf(r))return false;if(q){const hay=(cfg.search||Object.keys(r)).map(k=>r[k]??"").join(" ").toLowerCase();if(!hay.includes(q))return false;}const active={};Object.keys(SEL).filter(k=>SEL[k]).forEach(k=>{const[c,v]=k.split("::");(active[c]=active[c]||[]).push(v);});for(const c in active){const val=(r[c]??"").toString().trim()||"—";if(!active[c].includes(val))return false;}return true;}
+function sortRows(rs){if(!SORT.col)return rs;return rs.slice().sort((a,b)=>{const x=(a[SORT.col]??"").toString().replace(/,/g,''),y=(b[SORT.col]??"").toString().replace(/,/g,'');const nx=parseFloat(x),ny=parseFloat(y);let c=(!isNaN(nx)&&!isNaN(ny))?nx-ny:x.localeCompare(y);return c*SORT.dir;});}
+function vtag(r){const c=r.__cfg;if(!c.verdict||r[c.verdict]==null||r[c.verdict]==="")return "";const val=r[c.verdict].toString();const q=/watch|needs/i.test(val);return `<span class="tag ${q?'q':'v'}">${q?'?':'✓'} ${val}</span>`;}
+function rtag(r){return retOf(r)?`<span class="tag flag">⚑ retraction on record</span>`:"";}
+function render(){renderSide();let rs=sortRows(allRows().filter(matches));$("#count").textContent=`${rs.length.toLocaleString()} record${rs.length!==1?'s':''}`+(COMPOSE?" · all three":"")+(RET_ON?" · retraction overlay ON":"")+` · ${CUR.map(c=>c.label).join(" + ")}`;const b=$("#banners");b.innerHTML="";CUR.forEach(c=>{if(c.caveat)b.insertAdjacentHTML("beforeend",`<div class="banner disc">⚖︎ <b>${c.label}:</b> ${c.caveat}</div>`);});if(RET_ON)b.insertAdjacentHTML("beforeend",`<div class="banner help">⚑ A retraction is a publisher's public act — surfaced so you can weigh the evidence, never an accusation of the authors.</div>`);else if(CUR.length===1&&CUR[0].help)b.insertAdjacentHTML("beforeend",`<div class="banner help">ⓘ ${CUR[0].help}</div>`);const res=$("#results");if(!rs.length){res.innerHTML='<div class="empty">No matches.</div>';return;}TABLE?renderTable(rs,res):renderCards(rs,res);}
+function renderCards(rs,res){res.className="cardwrap";res.innerHTML="";rs.slice(0,200).forEach(r=>{const cfg=r.__cfg,card=document.createElement("div");card.className="card";const title=r[cfg.title]||Object.values(r)[0];const ct=COMPOSE?`<span class="tag" style="background:#ece8fb;color:#5b46b3">${r.__corpus}</span>`:"";const prov=(cfg.display||[]).filter(k=>k!==cfg.title).map(k=>r[k]!=null&&r[k]!==""?`<span class="tag">${k.replace(/_/g," ")}: ${r[k]}</span>`:"").join("");card.innerHTML=`<div class="t">${title}</div><div class="tags">${ct}${rtag(r)}${vtag(r)}${prov}</div>`;card.onclick=()=>drill(r);res.appendChild(card);});}
+function renderTable(rs,res){res.className="";const cfg=CUR[0];const cols=(COMPOSE?["__corpus"]:[]).concat(cfg.display||Object.keys(rs[0]).filter(k=>!k.startsWith("__")));let h="<table><thead><tr>"+(cfg.doiField?'<th>⚑</th>':'')+cols.map(c=>`<th data-c="${c}">${c.replace("__corpus","corpus").replace(/_/g," ")}${SORT.col===c?(SORT.dir>0?" ▲":" ▼"):""}</th>`).join("")+"</tr></thead><tbody>";rs.slice(0,300).forEach((r,i)=>{h+=`<tr data-i="${i}">`+(cfg.doiField?`<td>${retOf(r)?'⚑':''}</td>`:'')+cols.map(c=>`<td>${c===cfg.verdict?(vtag(r)||""):(r[c]??"")}</td>`).join("")+"</tr>";});res.innerHTML=h+"</tbody></table>";$$("#results th[data-c]").forEach(th=>th.onclick=()=>{const c=th.dataset.c;SORT.dir=(SORT.col===c?-SORT.dir:1);SORT.col=c;render();});$$("#results tbody tr").forEach(tr=>tr.onclick=()=>drill(rs[+tr.dataset.i]));}
+function drill(r){const cfg=r.__cfg,ret=retOf(r);const kv=Object.keys(r).filter(k=>!k.startsWith("__")).map(k=>`<div class="k">${k.replace(/_/g," ")}</div><div class="val">${r[k]||"—"}</div>`).join("");$("#sheet").innerHTML=`<button class="x" onclick="closeModal()">×</button><h2>${r[cfg.title]||"record"}</h2><div class="cl">${r.__corpus}</div><div class="kv">${kv}</div>${ret?`<div class="retbox">⚑ <b>Retraction on record.</b> Nature: ${ret.nature}. Reason: ${ret.reason}. Date: ${ret.date}.<br>The publisher retracted this work — surfaced so you can weigh the evidence, not as a judgment of anyone.</div>`:""}${cfg.link&&r[cfg.link]?`<p style="margin-top:14px"><a href="${r[cfg.link]}" target="_blank" rel="noopener">open source ↗</a></p>`:""}<p style="margin-top:14px;font-size:12px;color:var(--muted)">${cfg.caveat||""}</p>`;$("#modal").classList.add("open");}
+function closeModal(){$("#modal").classList.remove("open");}
+$("#modal").onclick=e=>{if(e.target.id==="modal")closeModal();};
+$("#q").addEventListener("input",render);
+$("#viewToggle").onclick=function(){TABLE=!TABLE;this.setAttribute("aria-pressed",TABLE);this.textContent=TABLE?"▤ Cards":"▦ Table";render();};
+$("#composeToggle").onclick=function(){COMPOSE=!COMPOSE;this.setAttribute("aria-pressed",COMPOSE);if(!COMPOSE)CUR=[CUR[0]];renderPick();render();};
+$("#retToggle").onclick=function(){RET_ON=!RET_ON;this.setAttribute("aria-pressed",RET_ON);if(RET_ON)CUR=[CORPORA[0]];renderPick();render();};
+renderPick();render();
+</script>
 </body>
 </html>

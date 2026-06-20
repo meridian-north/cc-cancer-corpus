@@ -73,6 +73,8 @@
 !/mechanism_index.json
 !/data/
 !/data/**
+# S235: protect intake (AC360 anonymization pending) — do NOT publish until decided
+/data/intake/
 
 # --- method/secret-sauce: never publish (added 2026-06-10) ---
 *FEEDSTOCK_SOURCING_PROMPT*
@@ -96,3 +98,4 @@ reclass_evidence.py
 
 !/generic_supplement_review.html
 !/index.html
+!/cancer_data.js
