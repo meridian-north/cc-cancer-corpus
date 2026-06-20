@@ -85,7 +85,7 @@ const CORPORA=[
    display:["title","journal","year","source_class","verified","mechanism_nodes","cohorts"],
    caveat:"A reference tool, not medical advice. Identifiers verified, evidence classified, mechanism patterns surfaced. No treatment recommendation — talk to your care team.",
    help:"Search titles, journals, mechanisms, cohorts. Click a row for full provenance. Turn on ⚑ Retraction overlay to see which cited papers were later retracted." },
- { id:"cancer_sub", key:"cancer_sub", label:"Substances (AC360 + Duke)", status:(D("cancer_sub").length||"")+" agents",
+ { id:"cancer_sub", key:"cancer_sub", label:"Substances (Duke + curated)", status:(D("cancer_sub").length||"")+" agents",
    title:"substance", link:null, sort:["candidate","evidence_floor","source"], facets:["source","type","candidate"],
    search:["substance","common_name","alt_names","mechanism"], verdict:"candidate",
    display:["substance","common_name","type","mechanism","source","evidence_floor","candidate"],
