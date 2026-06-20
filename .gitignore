@@ -75,6 +75,11 @@
 !/data/**
 # S235: protect intake (AC360 anonymization pending) — do NOT publish until decided
 /data/intake/
+# S235 caterpillar rule: raw JSON/JSONL feedstock under data/ stays LOCAL until fully distilled to CSV — never publish
+/data/**/*.json
+/data/**/*.jsonl
+/data/**/*.jsonl.gz
+/data/**/*.json.gz
 
 # --- method/secret-sauce: never publish (added 2026-06-10) ---
 *FEEDSTOCK_SOURCING_PROMPT*
