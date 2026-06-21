@@ -14,18 +14,38 @@ published source. The tool organizes; you and your care team decide.
 
 ## Use it in your browser — no install, no account
 
-**[▶ Open the Cancer Map Reader](https://meridian-north.github.io/cc-cancer-corpus/cancer_index.html)**
+**[▶ Open the Cancer Corpus tool](https://meridian-north.github.io/cc-cancer-corpus/)**
 
-A point-and-click front end to the whole index — no terminal, no setup. Browse the
-12 mechanism nodes (the *path of effect*), the evidence classes, and the tumor cohorts;
-search any agent by name; and save your results (the caveats travel inside the file).
-It runs entirely in your browser and sends nothing anywhere.
+A private, point-and-click tool over three linked corpora — the **literature**
+(6,358 verified studies and trials, with retractions flagged), the **substances**
+(2,628 supplements, herbs, and compounds, each tagged by mechanism and safety flag from
+the public-domain USDA Duke database), and **regulated herbals** (agents treated as
+medicine in Germany, Japan, and Canada).
 
-Prefer to work offline? Use the green **Code** button → **Download ZIP**, unzip, open
-**cancer_index.html**, and choose **data/cancer_index_v2_schema.csv** when it asks for a file.
+It opens by **taking you by the hand** — *check a list you're taking*, *look up one
+substance*, or *browse everything* — and every substance leads with a plain-language
+summary before any raw data. What it does:
 
-> A map of the literature, not medical advice. Indexed presence is not efficacy;
-> co-location at a mechanism is a question, never a verdict. Leads, not verdicts.
+- **Paste-your-regimen matcher** — paste your supplements and herbs; matched entirely in
+  your browser. Your list is never uploaded, saved, or sent anywhere — it never leaves your device.
+- **"Questions for my doctor" export** — compiles a private, editable sheet of what you
+  take, its flags, and the questions to raise with your care team — built on your device.
+- **Mechanism "cousins"** — see other substances that act the same way, sorted
+  *strongest-evidence-first* and labelled **not equivalents** (evidence strength and
+  safety usually matter more than a shared mechanism).
+- **Retraction overlay** — see which cited papers were later withdrawn by their publishers.
+- **Plain language throughout** — "RCT," "verified," "candidate," "evidence" each explain
+  themselves; nothing is left as bare jargon.
+
+It runs entirely in your browser and sends nothing anywhere. Prefer to work offline? Use
+the green **Code** button → **Download ZIP**, unzip, and open **index.html**.
+
+The earlier mechanism-node map reader is still here:
+[cancer_index.html](https://meridian-north.github.io/cc-cancer-corpus/cancer_index.html) —
+the 12 *path-of-effect* nodes, evidence classes, and tumor cohorts.
+
+> A map of the evidence, not medical advice. A match is not an endorsement; a gap is not a
+> verdict; a shared mechanism is a question, never proof of equivalence.
 
 ---
 
@@ -167,8 +187,13 @@ This corpus is under active development. Evidence levels are explicit and
 conservative. Where evidence is limited to preclinical or in vitro studies,
 that is stated. Where the evidence is contested, that is stated too.
 
-Current attestation anchor: `358c490`
-Last updated: 2026-06-09
+Current attestation anchor: `358c490` (the prior signed release).
+Corpus snapshot: **June 2026** — a point-in-time picture, not live; every row links to a
+source you can re-check. The June-2026 reader revision (guided entry, plain-language
+summaries, mechanism cousins with the evidence-guard, and the regimen matcher's
+doctor-visit export) **ships now and is pending re-attestation** — the next ceremony
+re-pins `MANIFEST_SHA256.txt` and records the new anchor.
+Last updated: 2026-06-21
 
 ---
 
