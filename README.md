@@ -172,6 +172,33 @@ Last updated: 2026-06-09
 
 ---
 
+## Cloning this tool — the shape travels, the proof does not
+
+This is a static HTML webform on purpose: anyone can fork it, fold in new studies,
+and host their own version. That openness is a feature — new evidence *should* update
+the tool. But a clone inherits the **design**, not the **attestation**, and it's
+important to be honest about the difference.
+
+**The canonical Meridian North release carries milspec provenance** a fork does not:
+
+- a `MANIFEST_SHA256.txt` pinning the exact bytes of every data file,
+- per-release signing and a two-tier custody chain (private chain → public BSV),
+- byte-for-byte reproducibility (same corpus version + same query → same output),
+- a recorded attestation anchor (this release: `358c490`).
+
+**A clone or fork has the webform and a copy of the data — and that is all.** It does
+*not* carry the SHA manifest, the signing, the custody chain, or reproducibility. Its
+data can be edited and can drift silently; its claims are only as good as whoever
+maintains it. **A fork must not present itself as carrying the milspec/attestation
+guarantees above**, and should state plainly that it is an *unattested copy*. The
+design discipline still applies in a fork — evidence is graded, caveats travel with the
+data, nothing is recommended — but the *proof* stays with the signed canonical release.
+
+If you clone this: keep this section, change the attestation line to read
+"unattested fork," and point users to the canonical release for the verifiable version.
+
+---
+
 ## Contact
 
 Questions, corrections, contributions, or collaboration:
