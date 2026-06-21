@@ -40,10 +40,6 @@ summary before any raw data. What it does:
 It runs entirely in your browser and sends nothing anywhere. Prefer to work offline? Use
 the green **Code** button → **Download ZIP**, unzip, and open **index.html**.
 
-The earlier mechanism-node map reader is still here:
-[cancer_index.html](https://meridian-north.github.io/cc-cancer-corpus/cancer_index.html) —
-the 12 *path-of-effect* nodes, evidence classes, and tumor cohorts.
-
 > A map of the evidence, not medical advice. A match is not an endorsement; a gap is not a
 > verdict; a shared mechanism is a question, never proof of equivalence.
 
