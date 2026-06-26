@@ -104,6 +104,17 @@
   /* plain-language summary — legibility-first, leads each substance card/drill before any raw data */
   .psum{font-size:13px;color:#3a4654;margin:2px 0 9px;line-height:1.45}
   .psumbox{background:#f4f8f7;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 14px;margin:0 0 14px;font-size:14px;color:#2f3e44;line-height:1.55}
+  /* typeahead — suggests real substance/herb names so a typo doesn't read as a gap */
+  .qfield{position:relative;flex:1;min-width:220px;display:flex}
+  .qfield .search{flex:1;min-width:0}
+  .qsug{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;max-height:300px;overflow:auto;z-index:30;box-shadow:0 12px 34px rgba(20,30,40,.16)}
+  .qsug[hidden]{display:none}
+  .qsug .qhead{padding:8px 12px;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--line)}
+  .qsug .qhead.gap{color:var(--warn-ink);background:var(--warn-bg)}
+  .qsug button.qopt{display:flex;width:100%;justify-content:space-between;gap:10px;align-items:center;text-align:left;border:none;border-bottom:1px solid var(--line);background:none;padding:9px 12px;font:inherit;font-size:13.5px;cursor:pointer;color:var(--ink)}
+  .qsug button.qopt:last-child{border-bottom:none}
+  .qsug button.qopt:hover,.qsug button.qopt:focus-visible{background:var(--accent-soft);outline:none}
+  .qsug .qk{color:var(--muted);font-size:11.5px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -121,7 +132,7 @@
   <div class="sub">A reference tool, not medical advice. Conventional + complementary evidence, every identifier verified, mechanisms surfaced, retractions flagged. It does not recommend treatment — it shows you the ground.</div>
   <div class="pickrow" id="pickrow"></div>
   <div class="toolbar">
-    <input class="search" id="q" placeholder="Search…" autocomplete="off">
+    <div class="qfield"><input class="search" id="q" placeholder="Search…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="qsug" aria-expanded="false"><div class="qsug" id="qsug" role="listbox" aria-label="name suggestions" hidden></div></div>
     <button class="btn" id="viewToggle" aria-pressed="false">▦ Table</button>
     <button class="btn" id="composeToggle" aria-pressed="false">⇄ All three</button>
     <button class="btn flag" id="retToggle" aria-pressed="false">⚑ Retraction overlay</button>
@@ -308,6 +319,45 @@ $("#gReg").onclick=()=>{hideGuide();openRegimen();};
 $("#gLook").onclick=()=>{hideGuide();$("#q").focus();};
 $("#gBrowse").onclick=()=>{hideGuide();};
 $("#guide").addEventListener("keydown",e=>{if(e.key==="Escape")hideGuide();});
+/* ---- Typeahead on the search box: offers real substance/herb names (reusing the
+   regimen name index RIDX) so a typo doesn't read as a gap, and the reader sees
+   what's on record before submitting. Suggestions only FILL the box — they never
+   silently rewrite or alias the query. ---- */
+let QVOCAB=null;
+function buildQVocab(){ if(!RIDX)buildRIdx(); QVOCAB=[]; const seen=new Set();
+  for(const k in RIDX){ const r=RIDX[k].rec; const disp=String(r.common_name||r.substance||"").trim();
+    if(!disp)continue; const key=disp.toLowerCase(); if(seen.has(key))continue; seen.add(key);
+    QVOCAB.push({disp,norm:k,kind:RIDX[k].kind}); } }
+function hideQSug(){ const box=$("#qsug"); if(box){box.hidden=true;box.innerHTML="";} const inp=$("#q"); if(inp)inp.setAttribute("aria-expanded","false"); }
+function chooseQSug(val){ const inp=$("#q"); inp.value=val; hideQSug(); render(); inp.focus(); }
+function renderQSug(){
+  const box=$("#qsug"),inp=$("#q"),raw=inp.value.trim();
+  if(raw.length<2){hideQSug();return;}
+  if(!QVOCAB)buildQVocab();
+  const t=raw.toLowerCase(),starts=[],incl=[];
+  for(const v of QVOCAB){ const d=v.disp.toLowerCase();
+    if(v.norm.startsWith(t)||d.startsWith(t))starts.push(v);
+    else if(v.norm.includes(t)||d.includes(t))incl.push(v); }
+  const list=starts.concat(incl).slice(0,8);
+  const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  const term=v=>{ const t=String(v.disp).split(/[\/,]/)[0].trim(); return t||v.disp; }; // a name like "Curcumin / Turmeric" searches as "Curcumin"
+  let h;
+  if(list.length){ h='<div class="qhead">substances &amp; herbs on record — click to search:</div>'+
+    list.map(v=>`<button type="button" class="qopt" role="option" data-q="${esc(term(v))}" title="search ${esc(term(v))}">${esc(v.disp)}<span class="qk">${v.kind==="herbal"?"regulated herbal":"substance"}</span></button>`).join(""); }
+  else { h='<div class="qhead gap">No substance or herb on record by that name — your search still runs over the text. A gap is not a verdict.</div>'; }
+  box.innerHTML=h; box.hidden=false; inp.setAttribute("aria-expanded","true");
+}
+$("#q").addEventListener("input",renderQSug);
+$("#q").addEventListener("keydown",e=>{ const box=$("#qsug");
+  if(e.key==="Escape"){hideQSug();}
+  else if(e.key==="ArrowDown"&&box&&!box.hidden){ const f=box.querySelector(".qopt"); if(f){e.preventDefault();f.focus();} } });
+$("#qsug").addEventListener("click",e=>{ const b=e.target.closest(".qopt"); if(b)chooseQSug(b.dataset.q); });
+$("#qsug").addEventListener("keydown",e=>{ const opts=[...$("#qsug").querySelectorAll(".qopt")]; if(!opts.length)return;
+  const i=opts.indexOf(document.activeElement);
+  if(e.key==="ArrowDown"){e.preventDefault();(opts[i+1]||opts[0]).focus();}
+  else if(e.key==="ArrowUp"){e.preventDefault(); if(i<=0)$("#q").focus(); else opts[i-1].focus();}
+  else if(e.key==="Escape"){hideQSug();$("#q").focus();} });
+document.addEventListener("click",e=>{ if(!e.target.closest(".qfield"))hideQSug(); });
 /* ---- init ---- */
 const _restored=readHash();
 syncToggles();renderPick();render();
