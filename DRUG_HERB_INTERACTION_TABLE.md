@@ -41,7 +41,7 @@ Echinacea is the clearest case in this table that an interaction warning is
 **state-dependent** — a property of the agent *in a context*, not of the herb alone.
 And the person most likely to take it (self-prescribing "immune support") is exactly the
 person who cannot see the warning without a second set of eyes — clinician, this table, or
-a BitNet flag. Same agent, three honest states:
+an automated second check. Same agent, three honest states:
 
 | Context (state) | Read | Evidence |
 |---|---|---|
@@ -58,9 +58,8 @@ Naming the right drug *strengthens* the warning: the hard evidence sits on **doc
 **checkpoint inhibitors**, not the platinum. That distinction is the whole argument for the
 over-the-shoulder review — no single keeper, human or AI, reliably catches it alone.
 
-*Composes with PleiotropyStratificationMt (the state lives in cohort + context, not the molecule),
-the `herb_drug_interaction_cyp_pgp` node, and DoseAnchoredSafetyDisclosureMt. BitNet-flaggable as
-agent × drug-class × context → warn / caution / safe.*
+*The warning is a property of the agent in a context — cohort and co-therapy, not the molecule
+alone — and resolves to one of three states: warn, caution, or safe.*
 
 ### Inhibitors (slow drug clearance — may increase side effects or toxicity)
 

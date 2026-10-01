@@ -71,8 +71,9 @@ There may come a day when those experimenter voices find a method — **perhaps 
 Garrison Node** — to contribute their n=1 experiences into a **crowd-sourced,
 open-sourced, cryptographically-attested** corpus: de-identified at the source, each
 contribution hash-anchored, the aggregate able to surface a signal no single person
-could see. That is the long horizon — the FUAG / data-vault / seed-record pattern
-pointed at patient self-report. **It is not built, not promised, and not current
+could see. That is the long horizon — a federated attestation grammar (a shared, machine-readable
+format for stating, per finding, what is verified by mathematics and what is narrated), a personal
+data vault, and a seed record, pointed at patient self-report. **It is not built, not promised, and not current
 capability.** It is recorded here as direction, deferred to the mesh and to updates, so
 the trajectory is legible without overclaiming the present.
 

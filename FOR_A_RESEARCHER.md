@@ -139,7 +139,7 @@ in the repository.
 
 If you want to run the same analysis on a different mechanistic node, extend
 the lexicon, or challenge the evidence classification — the tools are available
-and the invite is genuine. That is what CorrectMeIfImWrongMt means in practice:
+and the invite is genuine. That is the standing rule of this corpus — correct me if I'm wrong — in practice:
 the finding is held provisionally, and external challenge via reproduction
 is the right response.
 

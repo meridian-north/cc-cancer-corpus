@@ -49,7 +49,7 @@ re-verified at its authority before it counts — same rule as every other sourc
 IMPPAT entered as a **Tier-4 community-repo LEAD** (lowest trust) and **earned promotion
 to authority-class** by verifying out cleanly. That is the corpus's trust-promotion
 mechanic working as designed: a lead becomes an authority by proving itself, exactly the
-way a peer earns co-signatory status. Recorded in `CancerCorpusSourceRegistryMt.cycl`.
+way a peer earns co-signatory status. Recorded in the corpus source registry.
 
 ---
 

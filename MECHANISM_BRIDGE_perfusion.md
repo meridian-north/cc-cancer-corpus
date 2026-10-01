@@ -46,7 +46,7 @@ evidence class and the translation caveat attached.
 - **"Vascular normalization" is subtle:** not "more flow = better," but *organized*
   flow within *transient windows*, tumor-type-specific (glioblastoma ≠ pancreatic).
 - **Human evidence for exercise/heat modulating perfusion is thin** vs. the strong
-  preclinical/mechanistic base — flagged on every row (`PreclinicalTranslationScoringMt`).
+  preclinical/mechanistic base — flagged on every row as preclinical-only evidence, scored for how far it translates to humans.
 - **Double-edged theory worth naming:** increased flow has been hypothesized to aid
   metastatic spread; the clinical evidence actually trends the *other* way (exercise
   associates with better outcomes), but the corpus surfaces the open question, not a verdict.

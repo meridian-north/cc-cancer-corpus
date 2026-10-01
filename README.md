@@ -200,7 +200,7 @@ and host their own version. That openness is a feature — new evidence *should*
 the tool. But a clone inherits the **design**, not the **attestation**, and it's
 important to be honest about the difference.
 
-**The canonical Meridian North release carries milspec provenance** a fork does not:
+**The canonical Meridian North release carries attested, byte-reproducible provenance** a fork does not:
 
 - a `MANIFEST_SHA256.txt` pinning the exact bytes of every data file,
 - per-release signing and a two-tier custody chain (private chain → public BSV),
@@ -210,7 +210,7 @@ important to be honest about the difference.
 **A clone or fork has the webform and a copy of the data — and that is all.** It does
 *not* carry the SHA manifest, the signing, the custody chain, or reproducibility. Its
 data can be edited and can drift silently; its claims are only as good as whoever
-maintains it. **A fork must not present itself as carrying the milspec/attestation
+maintains it. **A fork must not present itself as carrying the attestation and reproducibility
 guarantees above**, and should state plainly that it is an *unattested copy*. The
 design discipline still applies in a fork — evidence is graded, caveats travel with the
 data, nothing is recommended — but the *proof* stays with the signed canonical release.
