@@ -1,4 +1,4 @@
-# Mechanism map — the 12 nodes
+# Mechanism map — the 12 nodes in the June snapshot
 
 The corpus's join key is the **mechanism node**. Each study is tagged by matching a
 curated, transparent lexicon of trigger phrases against its title and abstract. A
@@ -53,3 +53,17 @@ from cohort + context, never inferred from co-location at a node — co-location
 
 *The lexicon is curated and auditable. Counts are membership counts, not evidence of
 effect. Grouping is by mechanism, never by works/doesn't.*
+
+## Candidate topics added in October 2026
+
+The [circadian/metabolic bridge](MECHANISM_BRIDGE_circadian_metabolic.md) adds four
+query-time topics: `circadian_timing`, `warburg_pdh_pdk`,
+`antiplatelet_bleeding_risk` and `antioxidant_chemo_interaction`.
+Their rules live in `mechanism_topics.py`; they do not rewrite the 12-node snapshot
+or its counts above. The current intake tool's lexicon also contains
+`tumor_sensitization`, which is not represented as a node in this frozen release.
+Code vocabulary and released index membership are separate versions.
+
+Run `python3 query_index.py --topic-summary --json` for current candidate counts,
+source-class composition, corpus/rule hashes and abstract coverage. A topic may
+match negative findings or a retracted paper; it is not a positive mechanism claim.

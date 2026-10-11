@@ -75,3 +75,26 @@ Precomputed so the structure is visible without writing a query:
 
 *A map of the literature, hypothesis-generating, not medical advice. Every study is one
 link from its source; every tag is auditable.*
+
+## Research topics and local machine-readable queries
+
+```sh
+python3 query_index.py --topic circadian_timing --json
+python3 query_index.py --topic warburg_pdh_pdk --cohort lung --limit 20
+python3 query_index.py --topic-summary --json
+python3 query_index.py --node immune_checkpoint --class rct --json
+```
+
+Topic searches use the shipped compressed JSONL (titles and available abstracts).
+`--csv data/cancer_index.csv --topic warburg_pdh_pdk` explicitly uses the lighter,
+title-only source; the output labels this narrower coverage. JSON output omits the
+abstract text, preserves original class/verification fields, and adds input hashes,
+matched phrases/fields, total versus returned counts and limitations. A title that
+explicitly starts “Case report” but has another inherited class receives a review
+flag; this is a narrow discrepancy check, not complete evidence reclassification. `verified`
+is a historical field, not a fresh registry check. Unknown topic/node names fail
+instead of returning a misleading empty result. No server, MCP installation,
+telemetry or model connection is started.
+
+The [topic bridge](MECHANISM_BRIDGE_circadian_metabolic.md) explains interpretation.
+[TOPIC_COVERAGE.json](TOPIC_COVERAGE.json) records the reproducible counts.

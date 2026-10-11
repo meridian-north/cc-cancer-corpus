@@ -45,6 +45,30 @@ the green **Code** button → **Download ZIP**, unzip, and open **index.html**.
 
 ---
 
+## Private care notes and new research topics
+
+[Prepare a private note for your licensed practitioner](practitioner_notes.html).
+The worksheet has no submission path. Keep the download yourself and share it
+through your practitioner's secure channel; never post personal clinical information
+in this repository. [Privacy boundaries](PRACTITIONER_NOTES.md).
+
+Explore [circadian timing, the Warburg/PDH/PDK pathway, platelet questions and
+antioxidants alongside chemotherapy](MECHANISM_BRIDGE_circadian_metabolic.md).
+The new topic queries show matching phrases and inherited evidence classes, including
+negative and retracted studies. They are candidate retrieval aids; the original
+snapshot tags have not been silently reassigned. Local machine-readable output:
+
+```sh
+python3 query_index.py --topic warburg_pdh_pdk --json
+```
+
+**Literature snapshot: June 2026. Tools/guidance updated: October 10, 2026.**
+[Maintenance process](MAINTENANCE.md) · [Release status](RELEASE_STATUS.json) ·
+[Verify public bytes](MANIFEST_SHA256.txt). No new full literature refresh, current
+whole-corpus retraction check or release signature is claimed.
+
+---
+
 ## Start here — based on who you are
 
 | I am... | Go to |
@@ -183,40 +207,25 @@ This corpus is under active development. Evidence levels are explicit and
 conservative. Where evidence is limited to preclinical or in vitro studies,
 that is stated. Where the evidence is contested, that is stated too.
 
-Current attestation anchor: `358c490` (the prior signed release).
-Corpus snapshot: **June 2026** — a point-in-time picture, not live; every row links to a
-source you can re-check. The June-2026 reader revision (guided entry, plain-language
-summaries, mechanism cousins with the evidence-guard, and the regimen matcher's
-doctor-visit export) **ships now and is pending re-attestation** — the next ceremony
-re-pins `MANIFEST_SHA256.txt` and records the new anchor.
-Last updated: 2026-06-21
+The literature remains the **June 2026 snapshot**. The October 10, 2026 update adds
+private practitioner notes, candidate research-topic queries, contribution forms and
+local release checks. See [RELEASE_STATUS.json](RELEASE_STATUS.json) for separate
+literature, retraction and integrity status. A tools update is not a literature refresh.
 
----
+The prior README reported historical anchor `358c490`. That anchor has not been
+verified here and does not attest the changed files. The current
+[SHA-256 manifest](MANIFEST_SHA256.txt) covers the explicit
+[public inventory](PUBLIC_RELEASE_FILES.txt), and is **unsigned, pending any separate
+attestation**. Run `python3 verify_release.py` to check local byte equality.
 
-## Cloning this tool — the shape travels, the proof does not
+## Copies, forks and verification
 
-This is a static HTML webform on purpose: anyone can fork it, fold in new studies,
-and host their own version. That openness is a feature — new evidence *should* update
-the tool. But a clone inherits the **design**, not the **attestation**, and it's
-important to be honest about the difference.
-
-**The canonical Meridian North release carries attested, byte-reproducible provenance** a fork does not:
-
-- a `MANIFEST_SHA256.txt` pinning the exact bytes of every data file,
-- per-release signing and a two-tier custody chain (private chain → public BSV),
-- byte-for-byte reproducibility (same corpus version + same query → same output),
-- a recorded attestation anchor (this release: `358c490`).
-
-**A clone or fork has the webform and a copy of the data — and that is all.** It does
-*not* carry the SHA manifest, the signing, the custody chain, or reproducibility. Its
-data can be edited and can drift silently; its claims are only as good as whoever
-maintains it. **A fork must not present itself as carrying the attestation and reproducibility
-guarantees above**, and should state plainly that it is an *unattested copy*. The
-design discipline still applies in a fork — evidence is graded, caveats travel with the
-data, nothing is recommended — but the *proof* stays with the signed canonical release.
-
-If you clone this: keep this section, change the attestation line to read
-"unattested fork," and point users to the canonical release for the verifiable version.
+An unchanged copy can carry and verify the original manifest and any available
+signatures. Changing a covered file invalidates that file's recorded digest. Forks
+can create their own reproducible releases, but must identify their maintainer,
+version, modifications and attestation scope; they cannot claim the original
+maintainer signed changed bytes. Hash equality is not clinical validation or proof
+of an honest source. See [the release process](MAINTENANCE.md).
 
 ---
 

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<title>Private notes for my licensed practitioner</title>
+<style>
+:root{color-scheme:light;--ink:#203c40;--muted:#53666a;--line:#cfddda}*{box-sizing:border-box}body{margin:0;background:#f3f7f5;color:var(--ink);font:17px/1.55 system-ui,sans-serif}main{max-width:850px;margin:auto;padding:32px 24px 64px}a{color:#216c63}h1{font-size:clamp(27px,5vw,39px);line-height:1.15;max-width:700px}h2{font-size:22px}.eyebrow{letter-spacing:.08em;font-size:12px;font-weight:700}.notice{background:#e2eee8;border-left:4px solid #2f7864;padding:16px 20px;border-radius:4px}label{display:block;font-weight:650;margin:22px 0 7px}small{display:block;color:var(--muted);margin-bottom:8px}textarea{display:block;width:100%;min-height:104px;padding:12px;border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink);font:inherit}textarea:focus,button:focus-visible{outline:3px solid #81b8a7;outline-offset:3px}button{border:1px solid #216c63;border-radius:8px;background:#216c63;color:white;font:inherit;padding:10px 16px;cursor:pointer}.secondary{background:white;color:#216c63}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}#preview{white-space:pre-wrap;overflow-wrap:anywhere;background:white;padding:20px;border:1px solid var(--line);border-radius:8px}footer{font-size:14px;color:var(--muted);margin-top:32px}#status{min-height:1.5em;font-size:15px}
+</style>
+<script src="practitioner_notes.js" defer></script>
+</head>
+<body><main>
+<a href="index.html">← Back to the corpus</a>
+<p class="eyebrow">FOR YOUR CARE CONVERSATION</p>
+<h1>Private notes for my licensed practitioner</h1>
+<p>Put your observations and questions in order. Keep the note yourself, then share it directly with the licensed practitioner you choose through their secure channel.</p>
+<div class="notice"><strong>There is no submit button.</strong> Entries are not sent to GitHub or a model. The worksheet does not save entries in application storage. Downloaded notes are ordinary, unencrypted text. Do not post personal health information in this repository.</div>
+<p>Every field is optional. Record what already happened; this is not a treatment plan or a request to try something. For urgent concerns, use your practitioner’s usual urgent-care route.</p>
+<div id="worksheet">
+<label for="question">What would I like help understanding?</label><textarea id="question" maxlength="6000" autocomplete="off" spellcheck="false"></textarea>
+<label for="agents">Treatment, medicines and other products used</label><small id="agents-help">Record actual dose, units, route and formulation if known. “Unknown” is useful.</small><textarea id="agents" aria-describedby="agents-help" maxlength="6000" autocomplete="off" spellcheck="false"></textarea>
+<label for="timing">Timing and sequence</label><small>For example: relative to treatment, meals, sleep or symptoms.</small><textarea id="timing" maxlength="6000" autocomplete="off" spellcheck="false"></textarea>
+<label for="observations">What I observed or measured</label><small>Include no change or unwanted effects. Separate observations from possible explanations.</small><textarea id="observations" maxlength="6000" autocomplete="off" spellcheck="false"></textarea>
+<label for="confounders">What else changed?</label><small>Other medicines, diet, activity, sleep, illness or treatment changes.</small><textarea id="confounders" maxlength="6000" autocomplete="off" spellcheck="false"></textarea>
+<label for="review">Practitioner review and unresolved questions</label><small>A review does not mean that every risk has been ruled out.</small><textarea id="review" maxlength="6000" autocomplete="off" spellcheck="false"></textarea>
+<label for="sources">Published references I would like to discuss</label><small>DOI, PMID, trial identifier or title. An AI answer is a lead to check, not a source.</small><textarea id="sources" maxlength="6000" autocomplete="off" spellcheck="false"></textarea>
+</div>
+<div class="actions"><button id="preview-note" type="button">Preview my note</button><button id="download-note" type="button">Download .txt</button><button id="clear-note" class="secondary" type="button">Clear this worksheet</button></div>
+<p id="status" role="status" aria-live="polite"></p>
+<section id="preview-section" hidden><h2>My note</h2><pre id="preview"></pre></section>
+<noscript><p>JavaScript is disabled. You can still use the fields and copy your note manually; preview and download require JavaScript.</p></noscript>
+<footer>Loading the hosted page contacts the host. Your browser, extensions, recovery features and downloaded files have their own privacy settings. For offline use, open this page from a downloaded repository ZIP. <a href="PRACTITIONER_NOTES.md">Read the privacy and research boundaries.</a></footer>
+</main></body></html>

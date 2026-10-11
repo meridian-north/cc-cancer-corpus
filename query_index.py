@@ -1,82 +1,119 @@
 #!/usr/bin/env python3
-"""
-query_index.py — query the shipped cancer corpus index. No dependencies, no network,
-no source-intake folder needed: it runs against data/cancer_index.csv as shipped.
+"""Query the public frozen cancer corpus, locally; no dependencies or network."""
+import argparse
+import collections
+import csv
+import gzip
+import hashlib
+import itertools
+import json
+import re
+from pathlib import Path
+from mechanism_topics import TOPICS, VERSION, match_topic
 
-Examples:
-  python3 query_index.py --summary
-  python3 query_index.py --node immune_checkpoint --class rct
-  python3 query_index.py --cohort breast --node p53_apoptosis_cell_cycle
-  python3 query_index.py --grep curcumin --year-min 2020
-  python3 query_index.py --node vaccine_cancer_specifically
-  python3 query_index.py --crossroads          # co-occurring mechanism node pairs
+HERE = Path(__file__).resolve().parent
+LIMITATION = ("Candidate keyword retrieval is not a demonstrated mechanism, interaction, "
+              "safety finding or treatment benefit. Missing matches are not evidence of absence. "
+              "Evidence classes and retraction labels are inherited from the frozen snapshot; "
+              "no current registry or retraction check is performed.")
 
-Every row is hypothesis-generating only: counts are a floor, no denominator, no
-causation, no efficacy verdict. Follow each link to the source of record.
-"""
-import csv, os, sys, argparse, collections, itertools
-
-HERE = os.path.dirname(os.path.abspath(__file__))
 
 def load(path):
-    with open(path, encoding="utf-8") as fh:
-        return list(csv.DictReader(fh))
+    if str(path).endswith(".jsonl.gz"):
+        with gzip.open(path, "rt", encoding="utf-8") as stream:
+            rows = [json.loads(line) for line in stream if line.strip()]
+        for row in rows:
+            for field in ("mechanism_nodes", "cohorts"):
+                if isinstance(row.get(field), list):
+                    row[field] = "|".join(row[field])
+        return rows
+    with open(path, encoding="utf-8", newline="") as stream:
+        return list(csv.DictReader(stream))
+
 
 def main():
-    ap = argparse.ArgumentParser(description="Query the cancer corpus index.")
-    ap.add_argument("--csv", default=os.path.join(HERE, "data", "cancer_index.csv"))
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--csv", type=Path, help="Explicit CSV input; topic matching then uses titles only.")
     ap.add_argument("--node"); ap.add_argument("--cohort"); ap.add_argument("--class", dest="cls")
     ap.add_argument("--grep"); ap.add_argument("--year-min", type=int); ap.add_argument("--year-max", type=int)
     ap.add_argument("--limit", type=int, default=50)
-    ap.add_argument("--summary", action="store_true")
-    ap.add_argument("--crossroads", action="store_true")
+    mode = ap.add_mutually_exclusive_group()
+    mode.add_argument("--summary", action="store_true")
+    mode.add_argument("--crossroads", action="store_true")
+    mode.add_argument("--topic-summary", action="store_true")
+    ap.add_argument("--topic", choices=sorted(TOPICS))
+    ap.add_argument("--json", action="store_true", help="Machine-readable local output; abstracts are not exported.")
     a = ap.parse_args()
-
-    if not os.path.exists(a.csv):
-        sys.exit("index not found: %s (run from the repo root, or pass --csv)" % a.csv)
-    rows = load(a.csv)
-
-    if a.summary:
-        nodes = collections.Counter(n for r in rows for n in r["mechanism_nodes"].split("|") if n)
-        coh = collections.Counter(c for r in rows for c in r["cohorts"].split("|") if c)
-        cls = collections.Counter(r["source_class"] for r in rows if r["source_class"])
-        print("studies: %d  | with abstract: %d\n" % (len(rows), sum(1 for r in rows if r["has_abstract"]=="True")))
-        for label, ctr in (("MECHANISM NODES", nodes), ("TUMOR COHORTS", coh), ("EVIDENCE CLASS", cls)):
-            print(label)
-            for k, v in ctr.most_common():
-                print("  %-32s %d" % (k, v))
-            print()
-        return
-
-    if a.crossroads:
-        pair = collections.Counter()
-        for r in rows:
-            ns = [n for n in r["mechanism_nodes"].split("|") if n]
-            for x, y in itertools.combinations(sorted(ns), 2):
-                pair[(x, y)] += 1
-        print("MECHANISM CROSSROADS — studies touching two nodes at once\n")
-        for (x, y), n in pair.most_common(a.limit):
-            print("  %5d   %s + %s" % (n, x, y))
-        return
-
-    def keep(r):
-        if a.node and a.node not in r["mechanism_nodes"].split("|"): return False
-        if a.cohort and a.cohort not in r["cohorts"].split("|"): return False
-        if a.cls and r["source_class"] != a.cls: return False
-        if a.grep and a.grep.lower() not in r["title"].lower(): return False
-        y = r["year"][:4]
-        if a.year_min and (not y.isdigit() or int(y) < a.year_min): return False
-        if a.year_max and (not y.isdigit() or int(y) > a.year_max): return False
-        return True
-
-    hits = [r for r in rows if keep(r)]
-    print("%d match%s\n" % (len(hits), "" if len(hits) == 1 else "es"))
-    for r in hits[:a.limit]:
-        print("%-6s %-22s %s" % (r["year"][:4], (r["source_class"] or "-")[:22], r["title"][:90]))
-        print("       nodes: %s | cohorts: %s" % (r["mechanism_nodes"] or "-", r["cohorts"] or "-"))
-        if r["link"]: print("       %s" % r["link"])
-    if len(hits) > a.limit:
-        print("\n... %d more (raise --limit)" % (len(hits) - a.limit))
+    if a.limit < 0:
+        ap.error("--limit must be nonnegative")
+    if a.year_min and a.year_max and a.year_min > a.year_max:
+        ap.error("--year-min must not exceed --year-max")
+    if (a.summary or a.crossroads or a.topic_summary) and any((a.node, a.cohort, a.cls, a.grep, a.year_min, a.year_max, a.topic)):
+        ap.error("summary modes cannot be combined with row filters")
+    path = a.csv or HERE / "data" / ("cancer_index.jsonl.gz" if a.topic or a.topic_summary else "cancer_index.csv")
+    try:
+        rows = load(path)
+    except (OSError, ValueError, csv.Error) as exc:
+        ap.error("cannot read index: %s" % exc)
+    nodes = collections.Counter(n for r in rows for n in r.get("mechanism_nodes", "").split("|") if n)
+    if a.node and a.node not in nodes:
+        ap.error("unknown node in this snapshot: %s; use --summary or --topic for research topics" % a.node)
+    meta = {"input_file": path.name, "input_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "limitations": LIMITATION, "snapshot_refreshed": False,
+            "source_class_status": "inherited_not_reassessed"}
+    if a.topic or a.topic_summary:
+        meta.update({"topic_rules_version": VERSION, "topic_rules_sha256": hashlib.sha256((HERE / "mechanism_topics.py").read_bytes()).hexdigest(),
+                     "rows_scanned": len(rows), "rows_with_abstract": sum(bool(r.get("abstract")) for r in rows)})
+    if a.topic_summary:
+        result = dict(meta, topics={})
+        for name in sorted(TOPICS):
+            matches = [r for r in rows if match_topic(r, name)]
+            result["topics"][name] = {"label": TOPICS[name]["label"], "matches": len(matches),
+                                     "source_classes": dict(sorted(collections.Counter(r.get("source_class") or "unknown" for r in matches).items()))}
+    elif a.summary:
+        result = dict(meta, studies=len(rows), with_abstract=sum(str(r.get("has_abstract")).lower() == "true" for r in rows),
+                      mechanism_nodes=dict(nodes),
+                      cohorts=dict(collections.Counter(c for r in rows for c in r.get("cohorts", "").split("|") if c)),
+                      source_classes=dict(collections.Counter(r.get("source_class") or "unknown" for r in rows)))
+    elif a.crossroads:
+        pairs = collections.Counter(pair for r in rows for pair in itertools.combinations(sorted(set(filter(None, r.get("mechanism_nodes", "").split("|")))), 2))
+        result = dict(meta, pairs=[{"nodes": list(pair), "count": n} for pair, n in pairs.most_common(a.limit)])
+    else:
+        hits = []
+        for row in rows:
+            if a.node and a.node not in row.get("mechanism_nodes", "").split("|"): continue
+            if a.cohort and a.cohort not in row.get("cohorts", "").split("|"): continue
+            if a.cls and row.get("source_class") != a.cls: continue
+            if a.grep and a.grep.casefold() not in row.get("title", "").casefold(): continue
+            year = str(row.get("year", ""))[:4]
+            if a.year_min and (not year.isdigit() or int(year) < a.year_min): continue
+            if a.year_max and (not year.isdigit() or int(year) > a.year_max): continue
+            evidence = match_topic(row, a.topic) if a.topic else None
+            if a.topic and not evidence: continue
+            clean = {k: v for k, v in row.items() if k != "abstract"}
+            if evidence: clean["topic_match"] = evidence
+            if re.match(r"^case report\b", str(row.get("title", "")), re.I) and row.get("source_class") != "case_report":
+                clean["source_class_review"] = "Title identifies a case report; inherited source_class needs review. Do not treat this label as stronger evidence."
+            hits.append(clean)
+        result = dict(meta, match_count=len(hits), returned_count=min(len(hits), a.limit),
+                      source_classes=dict(sorted(collections.Counter(r.get("source_class") or "unknown" for r in hits).items())),
+                      rows=hits[:a.limit])
+    if a.json:
+        print(json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True))
+    elif "rows" in result:
+        print("%d matches (%d shown)\n" % (result["match_count"], result["returned_count"]))
+        for r in result["rows"]:
+            print("%s [%s] %s" % (str(r.get("year", ""))[:4], r.get("source_class") or "unknown", r.get("title", "")))
+            print("  nodes: %s | cohorts: %s" % (r.get("mechanism_nodes") or "-", r.get("cohorts") or "-"))
+            if r.get("link"): print("  " + r["link"])
+            if r.get("source_class_review"): print("  CLASSIFICATION REVIEW: " + r["source_class_review"])
+            if r.get("topic_match"):
+                m = r["topic_match"]
+                terms = sorted({h["field"] + ": " + h["phrase"] for rule in m["rules"] for h in rule["hits"]})
+                print("  candidate topic (%s): %s" % (m["text_scope"], "; ".join(terms)))
+        print("\n" + LIMITATION)
+    else:
+        print(json.dumps(result, indent=2, ensure_ascii=False))
 
 if __name__ == "__main__":
     main()
