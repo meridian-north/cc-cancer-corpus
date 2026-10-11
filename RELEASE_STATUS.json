@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "documentation_and_tools_updated": "2026-10-10",
+  "literature_snapshot": "2026-06",
+  "literature_snapshot_precision": "month as recorded in prior README; not a new retrieval date",
+  "literature_refresh_in_this_change": false,
+  "latest_complete_retraction_check": null,
+  "retraction_status": "historical labels retained; current whole-corpus check not established",
+  "topic_overlay": "candidate keyword retrieval over frozen public title and abstract fields",
+  "integrity_manifest": "MANIFEST_SHA256.txt",
+  "integrity_scope": "PUBLIC_RELEASE_FILES.txt",
+  "current_signature_status": "UNSIGNED_NOT_REATTESTED",
+  "historical_anchor_reported_by_prior_readme": "358c490",
+  "historical_anchor_verified_in_this_change": false,
+  "scheduled_refresh_enabled": false,
+  "personal_data_collection": false,
+  "patient_note_destination": "user-selected licensed practitioner through their secure channel"
+}

@@ -1,0 +1,67 @@
+{
+  "input_file": "cancer_index.jsonl.gz",
+  "input_sha256": "9056407de3a97e68c1ca9bddcc8d847f5af8a0b41319bbd4691e4e81141f480e",
+  "limitations": "Candidate keyword retrieval is not a demonstrated mechanism, interaction, safety finding or treatment benefit. Missing matches are not evidence of absence. Evidence classes and retraction labels are inherited from the frozen snapshot; no current registry or retraction check is performed.",
+  "rows_scanned": 6358,
+  "rows_with_abstract": 5369,
+  "snapshot_refreshed": false,
+  "source_class_status": "inherited_not_reassessed",
+  "topic_rules_sha256": "cac617f8bab43c133e91b641aac0bef5299a89e33a8a26ba1c515f0aeb7a0418",
+  "topic_rules_version": "1",
+  "topics": {
+    "antioxidant_chemo_interaction": {
+      "label": "Antioxidants alongside chemotherapy",
+      "matches": 126,
+      "source_classes": {
+        "case_report": 1,
+        "clinical_trial": 3,
+        "international_literature": 40,
+        "meta_analysis": 1,
+        "narrative_review": 54,
+        "observational": 15,
+        "rct": 6,
+        "systematic_review": 6
+      }
+    },
+    "antiplatelet_bleeding_risk": {
+      "label": "Platelet function and bleeding questions",
+      "matches": 17,
+      "source_classes": {
+        "clinical_trial": 7,
+        "international_literature": 2,
+        "narrative_review": 2,
+        "rct": 5,
+        "retracted": 1
+      }
+    },
+    "circadian_timing": {
+      "label": "Circadian biology and treatment timing",
+      "matches": 74,
+      "source_classes": {
+        "clinical_trial": 4,
+        "commentary": 2,
+        "international_literature": 12,
+        "meta_analysis": 1,
+        "narrative_review": 29,
+        "observational": 7,
+        "preprint": 3,
+        "rct": 14,
+        "systematic_review": 1,
+        "trial_registry": 1
+      }
+    },
+    "warburg_pdh_pdk": {
+      "label": "Warburg metabolism and the PDH / PDK axis",
+      "matches": 54,
+      "source_classes": {
+        "case_report": 1,
+        "clinical_trial": 6,
+        "international_literature": 18,
+        "narrative_review": 10,
+        "observational": 11,
+        "preprint": 5,
+        "rct": 3
+      }
+    }
+  }
+}

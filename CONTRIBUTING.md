@@ -22,10 +22,13 @@ If a claim in any document is wrong — wrong evidence level, wrong mechanism,
 wrong drug name — please correct it. Open an issue describing the error and
 the correct information with a source.
 
-**Patient and caregiver experience**
-If you have direct experience with a drug-herb interaction (confirmed or suspected),
-that is a signal worth noting. We cannot use it as evidence in the formal corpus,
-but it can guide which questions to prioritize for the literature review.
+**Private observations for licensed practitioners**
+Use the [private worksheet](practitioner_notes.html) to prepare a note for your own
+licensed practitioner. There is no submission function. **Do not send personal
+clinical information to this repository**, including issues, PRs, discussions,
+attachments or project email. Removing a name does not make a case anonymous.
+Only general literature questions and published references belong here; no personal
+case, regimen history or test results. See [the privacy boundaries](PRACTITIONER_NOTES.md).
 
 **Mechanism nodes**
 The corpus currently has detailed coverage of the OXPHOS/electron transport node
@@ -53,7 +56,11 @@ The tools are Python, stdlib only, no required packages.
 3. Open a pull request with a clear description of what you added and why
 4. Include the DOI or source for any new paper
 
-If you are adding a new mechanism node, model it on `MECHANISM_BRIDGE_electron_transport.md`.
+For new mechanism topics, follow [the circadian/metabolic bridge](MECHANISM_BRIDGE_circadian_metabolic.md). Include primary-source identifiers, conservative matching rules and positive/negative fixtures. Candidate retrieval topics remain separate from the canonical snapshot tags.
+
+Use the [issue forms](https://github.com/meridian-north/cc-cancer-corpus/issues/new/choose) for published references, corrections, general questions or synthetic software examples. Clinical advisors and pharmacologists are invited to review the interaction table and source-specific uncertainty; no advisor approval is implied by this invitation.
+
+Before pushing, follow [the maintenance and release checks](MAINTENANCE.md).
 
 ---
 

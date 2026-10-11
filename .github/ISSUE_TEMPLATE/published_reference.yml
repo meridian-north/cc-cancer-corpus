@@ -1,0 +1,33 @@
+name: Published reference or correction
+description: Suggest a source or correct a public claim. No personal records.
+title: "[Literature] "
+body:
+  - type: markdown
+    attributes:
+      value: "This issue will be public. Do not include medical records, personal histories, identifying details or private attachments. Use your licensed practitioner's secure channel for personal questions."
+  - type: input
+    id: identifier
+    attributes:
+      label: Published source identifier
+      description: DOI, PMID, NCT, or an official source URL. Identifier presence is not verification.
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed addition or correction
+      description: State the public claim, location and what the source supports, including limits or negative findings.
+    validations:
+      required: true
+  - type: input
+    id: topic
+    attributes:
+      label: Mechanism node or research topic
+      description: Use an existing name, or explain a proposed new topic in the field above.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Public contribution check
+      options:
+        - label: This contribution contains published literature or a general question and no personal clinical information.
+          required: true

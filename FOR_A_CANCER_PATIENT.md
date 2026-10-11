@@ -151,3 +151,11 @@ Every treatment decision belongs to you and your clinician.*
 *If you are experiencing a mental health crisis related to your diagnosis,
 please reach out to your care team, a cancer support hotline, or a trusted
 person in your life. You do not have to navigate this alone.*
+
+## Keep personal observations with your practitioner
+
+[Prepare a private note](practitioner_notes.html) about what you observed and what
+you want to ask. Download it for your licensed practitioner and use their secure
+channel. This repository has no patient-data submission service: do not put your
+medical history, regimen, results or identifying details in GitHub or project email.
+[Read the worksheet's privacy boundaries](PRACTITIONER_NOTES.md).

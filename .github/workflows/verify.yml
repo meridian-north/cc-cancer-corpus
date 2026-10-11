@@ -1,0 +1,24 @@
+name: Verify public release
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  offline-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Python behavior and release tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Practitioner worksheet tests
+        run: node --test tests/test_practitioner_notes.js
+      - name: Verify public release bytes
+        run: python3 verify_release.py --tracked
+      - name: Reproduce topic coverage
+        run: |
+          python3 query_index.py --topic-summary --json > /tmp/topic-coverage.json
+          diff -u TOPIC_COVERAGE.json /tmp/topic-coverage.json

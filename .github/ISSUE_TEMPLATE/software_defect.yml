@@ -1,0 +1,21 @@
+name: Software defect
+description: Report a reproducible problem using synthetic examples only.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Use invented examples. Do not attach practitioner notes, screenshots with personal details, health records or credentials."
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps, expected result and actual result
+      description: Include the release commit and browser or Python version when known.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Public contribution check
+      options:
+        - label: All examples are public or synthetic and contain no personal clinical information.
+          required: true

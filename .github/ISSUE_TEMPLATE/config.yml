@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private notes for your licensed practitioner
+    url: https://meridian-north.github.io/cc-cancer-corpus/practitioner_notes.html
+    about: Keep personal observations local and share directly with your practitioner. Do not send them to this repository.
